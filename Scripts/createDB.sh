@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 # shopt -s extglob
-
+#REGEX Needed
 function createDB() {
     echo "Enter the name of the database to create:"
     read -r dbName

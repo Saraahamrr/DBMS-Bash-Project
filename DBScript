@@ -1,13 +1,11 @@
 #! /usr/bin/env bash
 shopt -s extglob
+#REgex
 function Welcome() {
     echo "Welcome To our DataBase Project"
-    read -p "Enter your DataBase Name"
-
     if [ -e ~/DBMS/DataBase ] && [ -d ~/DBMS/DataBase ]; then
-        # clear
         echo "DataBase is Ready"
-        cd ~/DBMS/DataBase
+        cd ~/DBMS/DataBase 2>>/dev/null
     elif [ -e ~/DBMS/DataBase ] && [[ -f ~/DBMS/DataBase ]]; then
         rm ~/DBMS/DataBase
         mkdir ~/DBMS/DataBase
@@ -22,7 +20,8 @@ Welcome
 function mainMenu() {
     while true; do
         echo "Main Menu:"
-        select option in "CreateDB" "ListDB" "SelectDB" "DropDB" "test" "Exit"; do
+        # cd ~/DBMS/DataBase
+        select option in "CreateDB" "ListDB" "ConnectDB" "DropDB" "test" "Exit"; do
             case $REPLY in
             "CreateDB" | "1")
                 . ~/DBMS/Scripts/createDB.sh
@@ -33,8 +32,8 @@ function mainMenu() {
                 # echo "Existing DataBase:\n$(ls ~/DBMS/DataBase/)"
                 break
                 ;;
-            "SelectDB" | "3")
-                . ~/DBMS/Scripts/selectDB.sh
+            "ConnectDB" | "3")
+                . ~/DBMS/Scripts/connectDB.sh
                 break
                 ;;
             "DropDB" | "4")
