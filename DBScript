@@ -1,0 +1,66 @@
+#! /usr/bin/env bash
+shopt -s extglob
+function Welcome() {
+    echo "Welcome To our DataBase Project"
+    read -p "Enter your DataBase Name"
+
+    if [ -e ~/DBMS/DataBase ] && [ -d ~/DBMS/DataBase ]; then
+        # clear
+        echo "DataBase is Ready"
+        cd ~/DBMS/DataBase
+    elif [ -e ~/DBMS/DataBase ] && [[ -f ~/DBMS/DataBase ]]; then
+        rm ~/DBMS/DataBase
+        mkdir ~/DBMS/DataBase
+        echo "DataBase is now Ready"
+
+    else
+        mkdir ~/DBMS/DataBase
+        echo 'DataBase has Been Created'
+    fi
+}
+Welcome
+function mainMenu() {
+    while true; do
+        echo "Main Menu:"
+        select option in "CreateDB" "ListDB" "SelectDB" "DropDB" "test" "Exit"; do
+            case $REPLY in
+            "CreateDB" | "1")
+                . ~/DBMS/Scripts/createDB.sh
+                break
+                ;;
+            "ListDB" | "2")
+                . ~/DBMS/Scripts/listDB.sh
+                # echo "Existing DataBase:\n$(ls ~/DBMS/DataBase/)"
+                break
+                ;;
+            "SelectDB" | "3")
+                . ~/DBMS/Scripts/selectDB.sh
+                break
+                ;;
+            "DropDB" | "4")
+                bash ~/DBMS/Scripts/dropDB.sh
+
+                break
+                ;;
+            "test" | "5")
+                echo "Script  program."
+                bash ~/DBMS/Scripts/test.sh
+                . ~/DBMS/Scripts/test.sh
+                . ~/DBMS/Scripts/./test2
+                . ~/DBMS/Scripts/./test.sh
+                bash ~/DBMS/Scripts/./test2
+                ;;
+            "Exit" | "6")
+                echo "Exiting program."
+                exit 0
+                ;;
+            *)
+                echo "Invalid option. Please try again."
+                break
+                ;;
+            esac
+        done
+    done
+}
+
+mainMenu
