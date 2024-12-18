@@ -5,10 +5,9 @@ function selectDB() {
     echo "Enter the name of the database to Connect:"
     read -r dbName
     if [[ -e ~/DBMS-Bash-Project/DataBase/$dbName ]] && [[ -d ~/DBMS-Bash-Project/DataBase/$dbName ]]; then
-        echo "Database '$dbName' selected."
+        echo "Connected To ${dbName}"
         cd ~/DBMS-Bash-Project/DataBase/"${dbName}/" 2>>/dev/null
-        echo "${PWD}"
-        . ~/DBMS/Scripts/./tableMenu.sh
+        . ~/DBMS-Bash-Project/Scripts/./tableMenu.sh
         
     else
         echo -e "Database '$dbName' does not exist \nDo you want to Create DB?"

@@ -1,7 +1,5 @@
 #! /usr/bin/bash
  shopt -s extglob # Enable extended pattern matching
-function createTable() {
-   Thepri
     function createTable() {
 
         echo "Enter Table Name:"
@@ -62,11 +60,6 @@ function createTable() {
         echo -e "${tableSchema}" > "${Tname}.meta_data"
         echo    "Table ${Tname} Successfuly Created"
     }
-
-    createTable
-
-}
-
 createTable
 
 

@@ -1,13 +1,12 @@
 #! /usr/bin/env bash
-shopt -s extglob
+# shopt -s extglob
 #REgex
-Welcome
-function mainMenu() {
+function tableMenu() {
     while true; do
-        echo "Main Menu:"
-        cd ~/DBMS/DataBase
-        select option in "CreateDB" "ListDB" "SelectDB" "DropDB" "test" "Exit"; do
-            case $REPLY in
+        echo "Table Main Menu: "
+    
+        select option in CreateTable ListTables SelectTable insert update Delete Exit; do
+            case $option in
             "CreateTable" | "1")
                 echo
                 break
@@ -18,10 +17,10 @@ function mainMenu() {
             "SelectTable" | "3")
                 break
                 ;;
-            "insert" | "4")
+            "Insert" | "4")
                 break
                 ;;
-            "update" | "5")
+            "Update" | "5")
 
                 break
                 ;;
@@ -42,4 +41,4 @@ function mainMenu() {
     done
 }
 
-mainMenu
+tableMenu
