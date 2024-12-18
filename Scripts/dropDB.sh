@@ -3,7 +3,7 @@
 #REGEX Needed
 echo "Enter The DataBase Name you want to Delete:"
 read -r DDB
-if [[ ! -e ~/DBMS/DataBase/$DDB ]]; then
+if [[ ! -e ~/DBMS-Bash-Project/DataBase/$DDB ]]; then
      echo "There Is no Data Base With Such Name"
 else
 
@@ -11,6 +11,6 @@ else
      read -r answer
      #REGEX
      if [[ $answer == [Yy][Ee][Ss] ]]; then
-          rm -r ~/DBMS/DataBase/$DDB
+          rm -r ~/DBMS-Bash-Project/DataBase/$DDB
      fi
 fi

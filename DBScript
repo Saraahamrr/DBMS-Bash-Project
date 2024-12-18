@@ -1,55 +1,48 @@
 #! /usr/bin/env bash
 shopt -s extglob
 #REgex
+
 function Welcome() {
     echo "Welcome To our DataBase Project"
-    if [ -e ~/DBMS/DataBase ] && [ -d ~/DBMS/DataBase ]; then
-        echo "DataBase is Ready"
-        cd ~/DBMS/DataBase 2>>/dev/null
-    elif [ -e ~/DBMS/DataBase ] && [[ -f ~/DBMS/DataBase ]]; then
-        rm ~/DBMS/DataBase
-        mkdir ~/DBMS/DataBase
-        echo "DataBase is now Ready"
+    if [ -e ~/DBMS-Bash-Project/DataBase ] && [ -d ~/DBMS-Bash-Project/DataBase ]; then
+        echo "DBMS is Ready"
+        cd ~/DBMS-Bash-Project/DataBase 2>>/dev/null
+    elif [ -e ~/DBMS-Bash-Project/DataBase ] && [[ -f ~/DBMS-Bash-Project/DataBase ]]; then
+        rm ~/DBMS-Bash-Project/DataBase
+        mkdir ~/DBMS-Bash-Project/DataBase
+        echo "DBMS is now Ready"
 
     else
-        mkdir ~/DBMS/DataBase
-        echo 'DataBase has Been Created'
+        mkdir ~/DBMS-Bash-Project/DataBase
+        echo 'DBMS has Been Created'
     fi
 }
 Welcome
 function mainMenu() {
     while true; do
         echo "Main Menu:"
-        # cd ~/DBMS/DataBase
-        select option in "CreateDB" "ListDB" "ConnectDB" "DropDB" "test" "Exit"; do
+        # cd ~/DBMS-Bash-Project/DataBase
+        select option in CreateDB ListDB ConnectDB DropDB Exit; do
             case $REPLY in
-            "CreateDB" | "1")
-                . ~/DBMS/Scripts/createDB.sh
+            [Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb] | "1")
+                . ~/DBMS-Bash-Project/Scripts/createDB.sh
                 break
                 ;;
-            "ListDB" | "2")
-                . ~/DBMS/Scripts/listDB.sh
-                # echo "Existing DataBase:\n$(ls ~/DBMS/DataBase/)"
+            [Ll][Ii][Ss][Tt][Dd][Bb] | "2")
+                . ~/DBMS-Bash-Project/Scripts/listDB.sh
+                # echo "Existing DataBase:\n$(ls ~/DBMS-Bash-Project/DataBase/)"
                 break
                 ;;
-            "ConnectDB" | "3")
-                . ~/DBMS/Scripts/connectDB.sh
+            [Cc][Oo][Nn][Nn][Ee][Cc][Tt][Dd][Bb] | "3")
+                . ~/DBMS-Bash-Project/Scripts/connectDB.sh
                 break
                 ;;
-            "DropDB" | "4")
-                bash ~/DBMS/Scripts/dropDB.sh
+            [Dd][Rr][Oo][Pp][Dd][Bb] | "4")
+                bash ~/DBMS-Bash-Project/Scripts/dropDB.sh
 
                 break
                 ;;
-            "test" | "5")
-                echo "Script  program."
-                bash ~/DBMS/Scripts/test.sh
-                . ~/DBMS/Scripts/test.sh
-                . ~/DBMS/Scripts/./test2
-                . ~/DBMS/Scripts/./test.sh
-                bash ~/DBMS/Scripts/./test2
-                ;;
-            "Exit" | "6")
+            [Ee][Xx][Ii][Tt] | "5")
                 echo "Exiting program."
                 exit 0
                 ;;
