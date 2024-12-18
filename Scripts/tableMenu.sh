@@ -2,34 +2,34 @@
 shopt -s extglob
 #REgex
 Welcome
-function tableMenu() {
+function mainMenu() {
     while true; do
         echo "Main Menu:"
-        cd ~/DBMS-Bash-Project/DataBase
-        select option in CreateTable ListTables SelectTable insert update delete Exit,; do
+        cd ~/DBMS/DataBase
+        select option in "CreateDB" "ListDB" "SelectDB" "DropDB" "test" "Exit"; do
             case $REPLY in
-             [Cc][Rr][Ee][Aa][Tt][Ee][Dd][Tt][Aa][Bb][Ll][Ee] | "1")
+            "CreateTable" | "1")
                 echo
                 break
                 ;;
-            [Ll][Ii][Ss][Tt][Tt][Aa][Bb][Ll][Ee] | "2")
+            "ListTables" | "2")
                 break
                 ;;
-            [Ss][Ee][Ll][Ee][Cc][Tt][Tt][Aa][Bb][Ll][Ee] | "3")
+            "SelectTable" | "3")
                 break
                 ;;
-            [Ii][Nn][Ss][Ee][Rr][Tt] | "4")
+            "insert" | "4")
                 break
                 ;;
-            [Uu][Pp][Dd][Aa][Tt][Ee] | "5")
+            "update" | "5")
 
                 break
                 ;;
-            [Dd][Ee][Ll][Ee][Tt][Ee] | "6")
+            "Delete" | "6")
 
                 break
                 ;;
-            [Ee][Xx][Ii][Tt] | "7")
+            "Exit" | "7")
                 echo "Exiting program."
                 exit 0
                 ;;
@@ -42,4 +42,4 @@ function tableMenu() {
     done
 }
 
-tableMenu
+mainMenu
