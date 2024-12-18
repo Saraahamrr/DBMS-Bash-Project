@@ -13,7 +13,7 @@ function selectDB() {
 <<<<<<< HEAD
         cd ~/DBMS-Bash-Project/DataBase/$dbName 2>>/dev/null
 =======
-        cd ~/DBMS/DataBase/"${dbName}/" 2>>/dev/null
+        cd ~/DBMS-Bash-Project/DataBase/"${dbName}/" 2>>/dev/null
         echo "${PWD}"
         . ~/DBMS/Scripts/./tableMenu.sh
         
@@ -27,3 +27,4 @@ function selectDB() {
     fi
 }
 selectDB
+
