@@ -1,0 +1,175 @@
+#! /bin/bash
+#    read -r -p  "Enter Table Name :" Tname
+        # if [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]] ; then
+        #     echo "Table '$Tname' already exists."
+        #     . /home/zalabany/DBMS-Bash-Project/Scripts/createTable.sh
+        # fi
+            # if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
+            #     break
+            # else
+            #     echo "Invalid input. Please enter a positive integer for the column count."
+            # fi
+
+read  -p "Enter 2 values :\n" v1 
+echo $v1 
+# #! /usr/bin/bash
+# tableExist(){
+#         local Tname="$1"
+#     while true ;do
+#     echo "Checking..."
+#   if [[  -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
+#         echo "Proceed WIth Inserting"
+#         break
+#         else 
+#             # Table Dosen't exists 
+#             echo "Table '$Tname' Dosen't exists. Choose another name."
+#             read -r -p "Enter Table Name again: " Tname
+#             continue
+#         fi
+#         done
+
+# }
+# function insertIntoTable() {
+    
+#     read -r -p "Enter Table Name " Tname
+#     tableExist "${Tname}"
+#        #Dynamic Location SomeHow
+#      IFS=$'\n' read -d '' -r -a lines < "${PWD}/${Tname}.meta_data" 
+#     #  mapfile -t lines < /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB3.meta_data
+#     #  lines=($(awk '{print $0}' /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB3.meta_data))
+#         End=$(( ${#lines[@]} - 1 ))
+#         tableContent=""  #loop The Lines (Lines Contains The MetaData That The user Put in the Create Table Section)
+#         for i in "${!lines[@]}";do 
+#         echo $i
+#         #Change The field Seperator To  + Accept The Value As Array: Instead of the Default Note: Default  IFS That is " "
+#         IFS=':' read -r -a columnContent <<< "${lines[i]}";
+            
+#         colName=${columnContent[0]};
+#         colDataType=${columnContent[1]};
+#         colPK=${columnContent[2]};
+
+#         #test flags
+#         dataTypeFlag=0; #true
+#         pkFlag=0;   #true
+
+#         #read new column value from user
+#         read -r -p "Enter $colName: " ColValue;
+#         numRegex='^[0-9]+$'
+#         # validate dataType
+#         if [[ $colDataType == "int" ]]; then
+#             if ! [[ $ColValue =~ $numRegex ]]; then
+#                 dataTypeFlag=1; #false1
+#                 errorFlag=1; #false
+#                 echo "ERROR: Value must be a Intergar.";
+#             fi 
+#         fi
+
+#         # validate if PK
+#         if [[ $colPK -eq "PK" ]]; then
+#             # get all column data from Data/tableName
+#             IFS=$'\n' read -d '' -r -a idCheck < "${PWD}/${Tname}"  #
+            
+#             #loop over column data to check pk if unique untill dataline is 0
+#             for j in "${!idCheck[@]}";do
+#                 IFS=':' read -r -a record <<< "${idCheck[$j]}"; # split Record Into Pieces To Check Line By LIne
+#                 if [[ ${record[$i]} -eq $ColValue ]]; then
+#                     pkFlag=1; #false(not-unique)
+#                     echo "${record[$i]} ${idCheck}"
+#                     errorFlag=1; #false
+#                     echo "ERROR: Primary key must be unique.";
+#                     read -r -p "Enter ${colName} again: " ColValue
+
+#                 fi
+#             done
+#         fi
+
+#         if [[ $i -eq $End  ]] ;then
+#          tableContent+="${ColValue}"
+#          else
+#          tableContent+="${ColValue}:"
+#              fi
+# done
+
+  
+#  echo -e "${tableContent}" >> ${PWD}/${Tname}
+
+# }
+# insertIntoTable
+
+#     # print "Enter The Data you Want To insert :" $1
+
+#     # printf "Enter The Data you Want To insert :"
+#     # getline colname 
+
+#!/usr/bin/bash
+# shopt -s extglob # Enable extended pattern matching
+# # Function to validate column count
+# function createTableContent() {
+#     local colNum="$1"
+#     while true; do
+#         # Validate that the input is a positive integer
+#         if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
+#             break
+#         else
+#             echo "Invalid input. Please enter a positive integer for the column count."
+#             read -r -p "Enter column count again: " colNum
+#       fi
+#     done
+# }
+# # Function to create a table
+# function createTable() {
+#     PS1="Select Option: "
+#     while true; do
+#         # Prompt user for the table name
+#         read -r -p "Enter Table Name: " Tname
+#         if [[ ! -e "${PWD}/$Tname" ]]; then
+#             # Table doesn't exist, proceed to create it
+#             read -r -p "Enter ${Tname} Columns Number: " colNum
+#             createTableContent "$colNum" # Validate column count
+#             echo -e "Creating table '$Tname' with $colNum columns..."
+#             break
+#         elif [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
+#             # Table already exists as a file
+#             echo "Table '$Tname' already exists. Choose another name."
+#         else
+#             # Table exists as a directory
+#             echo "'$Tname' exists as a directory. Recreating your table as a file..."
+#             rm -r "${PWD}/$Tname" # Remove the directory
+#             read -r -p "Enter Columns Number: " colNum
+#             createTableContent "$colNum" # Validate column count
+#             echo -e "Creating table '$Tname' with $colNum columns..."
+#             break
+#         fi
+#     done
+# #-----------------------------------------------------------------------------------------------------------------
+#         declare -i num=0
+#         pkFlag=0
+#         tableSchema="" 
+#         echo "The first column will be the Primary Key (PK)."W
+#         while ((num < colNum)); do
+#             echo "Enter Column $((num + 1)) Name:"
+#             read -r colName
+#             if [[ ! $colName =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+#                 echo "Invalid column name. Use letters, numbers, and underscores only."
+#                 continue
+#             fi
+#             echo "Enter Column $((num + 1)) Datatype (int/str):"
+#             read -r colType
+#             if [[ $colType != "int" && $colType != "str" ]]; then
+#                 echo "Invalid datatype. Only 'int' or 'str' are allowed."
+#                 continue #Re Ask for The Data Type
+#             fi
+#             if [[ $pkFlag -eq 0 ]]; then
+#                 tableSchema+="${colName}:${colType}:PK\n" #MetaData FIle
+#                 pkFlag=1
+#             else
+#                 tableSchema+="$colName:$colType\n"
+#             fi
+#             ((num++))
+#         done
+#         touch   "${Tname}.meta_data"
+#         touch   "${Tname}"
+#         echo -e "${tableSchema}" > "${Tname}.meta_data"
+#         echo -e "Table ${Tname} Successfuly Created"
+# }
+# createTable

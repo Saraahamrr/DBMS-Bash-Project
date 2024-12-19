@@ -6,7 +6,7 @@ function selectDB() {
     read -r dbName
     if [[ -e ~/DBMS-Bash-Project/DataBase/$dbName ]] && [[ -d ~/DBMS-Bash-Project/DataBase/$dbName ]]; then
         echo "Connected To ${dbName}"
-        cd ~/DBMS-Bash-Project/DataBase/"${dbName}/" 2>>/dev/null
+        cd "${PWD}"/"${dbName}/" 2>>/dev/null
         . ~/DBMS-Bash-Project/Scripts/./tableMenu.sh
         
     else

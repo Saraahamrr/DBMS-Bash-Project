@@ -1,66 +1,82 @@
-#! /usr/bin/bash
- shopt -s extglob # Enable extended pattern matching
-    function createTable() {
+#!/usr/bin/bash
+shopt -s extglob # Enable extended pattern matching
 
-        echo "Enter Table Name:"
-        read -r Tname
+# Function to create a table
+function createTable() {
+    while true; do
+        # Prompt user for the table name
+        read -r -p "Enter Table Name: " Tname
+        if [[ ! $Tname =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+            echo "Invalid table name. Use letters, numbers, and underscores only."
+            continue
+        fi
+        if [[ ! -e "${PWD}/$Tname" ]]; then
+            # Table doesn't exist, proceed to create it
+            while true; do
+                read -r -p "Enter ${Tname} Columns Number: " colNum
+                if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
+                    break
+                else
+                    echo "Invalid input. Please enter a positive integer for the column count."
+                fi
+            done
+            echo -e "Creating table '$Tname' with $colNum columns..."
+            break
+        elif [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
+            # Table already exists as a file
+            echo "Table '$Tname' already exists. Choose another name."
+        else
+            # Table exists as a directory
+            echo "'$Tname' exists as a directory. Recreating your table as a file..."
+            rm -r "${PWD}/${Tname}" # Remove the directory
+            while true; do
+                read -r -p "Enter Columns Number: " colNum
+                if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
+                    break
+                else
+                    echo "Invalid input. Please enter a positive integer for the column count."
+                fi
+            done
+            echo -e "Creating table '$Tname' with $colNum columns..."
+            break
+        fi
+    done
 
-        if [[ -e "${PWD}/$Tname" ]]; then
-            echo "Table '$Tname' already exists."
-            return
+    declare -i num=0
+    pkFlag=0
+    tableSchema=""
+    echo "The first column will be the Primary Key (PK)."
+    while ((num < colNum)); do
+        #  column name
+        read -r -p "Enter Column $((num + 1)) Name: " colName
+        if [[ ! $colName =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+            echo "Invalid column name. Use letters, numbers, and underscores only."
+            continue
         fi
 
-        while true; do
-            echo "Enter Number Of Columns:"
-            read -r colNum
-            if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
-                break
-            else
-                echo "Invalid input. Please enter a positive integer for the column count."
-            fi
-        done
+        #  column datatype
+        read -r -p "Enter Column $((num + 1)) Datatype (int/str): " colType
+        if [[ $colType != "int" && $colType != "str" ]]; then
+            echo "Invalid datatype. Please choose either 'int' (integer) or 'str' (string)."
+            continue
+        fi
 
-        declare -i num=0
-        pk=false
-        tableSchema=""
+        # Add column to schema
+        if [[ $pkFlag -eq 0 ]]; then
+            tableSchema+="${colName}:${colType}:PK\n" # Add Primary Key (PK)
+            pkFlag=1
+        else
+            tableSchema+="${colName}:${colType}\n"
+        fi
+        ((num++))
+    done
 
-        echo "The first column will be the Primary Key (PK)."
-             echo "${tableSchema} 1"
-        while ((num < colNum)); do
-               echo "${tableSchema} 1"
-            echo "Enter Column $((num + 1)) Name:"
-            read -r colName
-            if [[ ! $colName =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-                echo "Invalid column name. Use letters, numbers, and underscores only."
-                continue
-            fi
-            echo "Enter Column $((num + 1)) Datatype (int/str):"
-            read -r colType
-            if [[ $colType != "int" && $colType != "str" ]]; then
-                echo "Invalid datatype. Only 'int' or 'str' are allowed."
-                continue
-            fi
-                   echo "${tableSchema} 1"
-            if [[ $pk -eq false ]]; then
+    # Create table files
+    touch "${Tname}.meta_data"
+    touch "${Tname}"
+    echo -e "${tableSchema}" > "${Tname}.meta_data"
+    echo -e "Table '${Tname}' successfully created with $colNum columns."
+}
 
-                tableSchema+="${colName}:${colType}:PK\n"
-
-                pk=true
-            else
-
-                tableSchema+="$colName:$colType\n"
-            fi
-            echo "${tableSchema} 4 "
-
-            ((num++))
-        done
-      
-        touch   "${Tname}.meta_data"
-        touch   "${Tname}"
-        echo -e "${tableSchema}" > "${Tname}.meta_data"
-        echo    "Table ${Tname} Successfuly Created"
-    }
+# Run the create table function
 createTable
-
-
-
