@@ -20,13 +20,13 @@ function Welcome() {
 Welcome
 function mainMenu() {
     loop=true
-        # PS1="SelectOption$"
+    # PS1="SelectOption$"
     while $loop; do
         echo "Main Menu:"
-    PS3="SelectOption: "
+        PS3="SelectOption: "
         # cd ~/DBMS-Bash-Project/DataBase
         select option in CreateDB ListDB ConnectDB DropDB Exit; do
-   PS3="SelectOption: "
+            PS3="SelectOption: "
             case $option in
 
             [Cc][Rr][Ee][Aa][Tt][Ee][Dd][Bb] | "1")
@@ -39,7 +39,7 @@ function mainMenu() {
                 break
                 ;;
             [Cc][Oo][Nn][Nn][Ee][Cc][Tt][Dd][Bb] | "3")
-                . ~/DBMS-Bash-Project/Scripts/connectDB.sh 
+                . ~/DBMS-Bash-Project/Scripts/connectDB.sh
                 break
                 ;;
             [Dd][Rr][Oo][Pp][Dd][Bb] | "4")

@@ -1,8 +1,20 @@
 #!/usr/bin/bash
-
 insertIntoTable() {
     # Prompt user to enter the table name
-    read -r -p "Enter Table Name: " Tname
+    list=($(ls "${PWD}" | grep -v '\.meta_data$'))
+    echo -e "Listing Files:\n"
+    select item in "${list[@]}" "Exit"; do
+        if [[ "$item" == "Exit" ]]; then
+            echo "Exiting program."
+            exit 0
+        elif [[ -n "$item" ]]; then
+            echo "You selected: $item"
+            Tname="${item}"
+            break
+        else
+            echo "Invalid selection, try again."
+        fi
+    done
 
     # Check if the table exists
     while true; do
@@ -21,18 +33,20 @@ insertIntoTable() {
     metadataFile="${PWD}/${Tname}.meta_data"
     if [[ ! -e "$metadataFile" ]]; then
         echo "Error: Metadata file not found for table '$Tname'."
+        . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
         return 1
     fi
 
     # Read metadata lines into an array
-    IFS=$'\n' read -d '' -r -a lines < "$metadataFile"
-    numColumns=${#lines[@]}
+    # IFS=$'\n' read -d '' -r -a lines < "$metadataFile"
+    #  mapfile -t lines < /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB3.meta_data
+    lines=($(awk '{print $0}' $metadataFile))
+    numColumns="${#lines[@]}"
     tableContent=""
-
     # Process each column based on metadata
+    echo "The First Value is Your PrimaryKey"
     for i in "${!lines[@]}"; do
-        IFS=':' read -r colName colDataType colPK <<< "${lines[i]}"
-
+        IFS=':' read -r colName colDataType colPK <<<"${lines[i]}"
         while true; do
             # Prompt user for column value
             read -r -p "Enter value for $colName ($colDataType): " ColValue
@@ -47,13 +61,15 @@ insertIntoTable() {
             # Validate primary key
             if [[ $colPK == "PK" ]]; then
                 while IFS= read -r record; do
-                    IFS=':' read -r -a fields <<< "$record"
+                    echo "$record"
+                    IFS=':' read -r -a fields <<<"$record"
+                    echo "$fields{0}"
                     if [[ "${fields[0]}" == "$ColValue" ]]; then
                         echo "ERROR: Primary key must be unique."
                         valid=0
                         break
                     fi
-                done < "${PWD}/${Tname}"
+                done <"${PWD}/${Tname}"
             fi
 
             # Break loop if input is valid
@@ -69,7 +85,7 @@ insertIntoTable() {
     done
 
     # Append the new row to the table file
-    echo "$tableContent" >> "${PWD}/${Tname}"
+    echo "$tableContent" >>"${PWD}/${Tname}"
     echo "Data successfully inserted into table '$Tname'."
 }
 

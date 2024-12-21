@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-# shopt -s extglob
+shopt -s extglob
 #REGEX Needed
 
 . /home/sarah/DBMS-Bash-Project/Scripts/RegexFunc.sh

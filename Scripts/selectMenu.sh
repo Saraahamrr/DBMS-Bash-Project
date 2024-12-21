@@ -1,0 +1,89 @@
+#!/bin/bash
+shopt -s extglob # Enable extended pattern matching
+
+function SelectMenu() {
+    list=($(ls "${PWD}" | grep -v '\.meta_data$'))
+    echo -e "Listing Files:\n"
+    select item in "${list[@]}" "Exit"; do
+        if [[ "$item" == "Exit" ]]; then
+            echo "Exiting program."
+            exit 0
+        elif [[ -n "$item" ]]; then
+            echo "You selected: $item"
+            choice="${item}"
+            break
+        else
+            echo "Invalid selection, try again."
+        fi
+    done
+
+    metadataFile="${PWD}/${choice}.meta_data"
+    if [[ ! -f "$metadataFile" ]]; then
+        echo "Metadata file not found for $choice. Exiting."
+        exit 1
+    fi
+
+    columnName=($(awk -F: '{print $1}' "$metadataFile"))
+    echo -e "Columns available: ${columnName[@]}"
+
+    echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
+    select colName in "${columnName[@]}" "Select*" "value" "Exit"; do
+        if [[ "$colName" == "Exit" ]]; then
+            echo "Exiting Selecting process."
+            break
+        elif [[ -n "$colName" && "$colName" != "value" && "$colName" != "Select*" ]]; then
+            for i in "${!columnName[@]}"; do
+                if [[ "${columnName[$i]}" == "$colName" ]]; then
+                    colIndex=$((i + 1)) # Make it 1-based index for awk
+                    break
+                fi
+            done
+            echo "You selected: $colName (Index: $colIndex)"
+
+            if [[ "$colName" == "${columnName[0]}" ]]; then
+                echo "You are attempting to update the Primary Key (PK) column. If you leave the value empty, it will return the whole column."
+                . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh
+                read -r -p "Enter the Primary Key value: " currentValue
+                if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+                    . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$item" "$colIndex" "$currentValue"
+                else
+                    echo "selectAll.sh script not found!"
+                fi
+            else
+                . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh
+                echo "You are selecting the $colName column. If you leave the value empty, it will return the whole column."
+                read -r -p "Enter the current value: " currentValue
+                if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+                    . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$item" "$colIndex" "$currentValue"
+                else
+                    echo "selectAll.sh script not found!"
+                fi
+            fi
+            break
+        elif [[ "$colName" == "Select*" ]]; then
+            if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+                . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$item" "All"
+            else
+                echo "selectAll.sh script not found!"
+            fi
+            break
+        elif [[ "$colName" == "value" ]]; then
+            . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh
+            echo -e "\nSelect the column to update its values:"
+            echo "Select a specific record by entering 2 values: PK and the value you want to Select ."
+            read -r -p "Enter the Primary Key value: " PK
+            read -r -p "Enter the current value: " currentValue
+            echo "$PK  $currentValue  $item"
+            if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+                . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$item" "$colIndex" "$currentValue"
+            else
+                echo "selectAll.sh script not found!"
+            fi
+            break
+        else
+            echo "Invalid selection, try again."
+        fi
+    done
+}
+
+SelectMenu

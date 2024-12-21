@@ -74,7 +74,7 @@ function createTable() {
     # Create table files
     touch "${Tname}.meta_data"
     touch "${Tname}"
-    echo -e "${tableSchema}" > "${Tname}.meta_data"
+    echo -e "${tableSchema}" >"${Tname}.meta_data"
     echo -e "Table '${Tname}' successfully created with $colNum columns."
 }
 

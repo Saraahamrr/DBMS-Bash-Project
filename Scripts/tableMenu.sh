@@ -4,15 +4,15 @@ shopt -s extglob
 function tableMenu() {
     SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
     echo "${SCRIPT_DIR}"
-    PS1="SelectOption$ "
+    PS3="SelectOption $:"
     loop=true
-   #!/usr/bin/env bash
+    #!/usr/bin/env bash
 
-# Main Menu Loop
-while true; do
-    echo "Table Main Menu: "
-    select option in CreateTable ListTables SelectTable Insert Update Delete DataBaseMenu Exit; do
-        case $option in
+    # Main Menu Loop
+    while true; do
+        echo "Table Main Menu: "
+        select option in CreateTable ListTables SelectTable Insert Update Delete DataBaseMenu Exit; do
+            case $option in
             "CreateTable" | "1")
                 echo "Executing CreateTable..."
                 . ~/DBMS-Bash-Project/Scripts/createTable.sh
@@ -24,7 +24,8 @@ while true; do
                 break
                 ;;
             "SelectTable" | "3")
-                echo "Selecting table..."
+                echo "Selecting data..."
+                . ~/DBMS-Bash-Project/Scripts/selectMenu.sh
                 # Add logic to select a table here
                 break
                 ;;
@@ -35,16 +36,19 @@ while true; do
                 ;;
             "Update" | "5")
                 echo "Updating table..."
+                . ~/DBMS-Bash-Project/Scripts/updateMenu.sh
                 # Add logic to update table here
                 break
                 ;;
             "Delete" | "6")
                 echo "Deleting table..."
+                . ~/DBMS-Bash-Project/Scripts/deleteMenu.sh
                 # Add logic to delete table here
                 break
                 ;;
             "DataBaseMenu" | "7")
                 echo "Returning to Database Menu..."
+                ~/DBMS-Bash-Project/DBScript
                 # Add logic to go back to the database menu
                 break
                 ;;
@@ -55,9 +59,9 @@ while true; do
             *)
                 echo "Invalid option. Please try again."
                 ;;
-        esac
+            esac
+        done
     done
-done
 
 }
 
