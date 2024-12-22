@@ -20,6 +20,7 @@ function tableMenu() {
                 ;;
             "ListTables" | "2")
                 echo "Listing tables..."
+                . ~/DBMS-Bash-Project/Scripts/ListTB.sh
                 # Add logic to list tables here
                 break
                 ;;
