@@ -11,4 +11,5 @@ function check_dbname() {
     else
         return 1
     fi
+    echo "${dbname}"
 }

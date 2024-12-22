@@ -59,9 +59,7 @@ insertIntoTable() {
             # Validate primary key
             if [[ $colPK == "PK" ]]; then
                 while IFS= read -r record; do
-                    echo "$record"
                     IFS=':' read -r -a fields <<<"$record"
-                    echo "$fields{0}"
                     if [[ "${fields[0]}" == "$ColValue" ]]; then
                         echo "ERROR: Primary key must be unique."
                         valid=0

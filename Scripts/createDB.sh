@@ -2,7 +2,7 @@
 shopt -s extglob
 #REGEX Needed
 
-. /home/sarah/DBMS-Bash-Project/Scripts/RegexFunc.sh
+. ~/DBMS-Bash-Project/Scripts/RegexFunc.sh
 
 function createDB() {
     echo "Enter the name of the database to create:"
