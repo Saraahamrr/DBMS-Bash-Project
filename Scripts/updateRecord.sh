@@ -10,6 +10,7 @@ if [[ -z "$oldValue" || -z "$newValue" || -z "$tableName" || -z "$PK" ]]; then
     echo "The Value must not be empty."
     . ~/DBMS-Bash-Project/Scripts/updateMenu.sh
 fi
+
 # Use awk to find and modify the column value
 newValueLocation=$(
     awk -v PK="${PK}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
@@ -41,8 +42,25 @@ oldValueLocation=$(
     
     }' "${PWD}/${tableName}"
 )
-echo -e "$oldValueLocation \n"
-echo -e "$newValueLocation"
+#validation
+IFS=":" read -r -a validateData <<<"${oldValueLocation}"
+meta_data=($(awk -F: '{print $2}' "${PWD}/${tableName}.meta_data"))
+IFS=" " read -r -a metaType <<<"${meta_data[@]}"
+
+# Debug output for validation
+echo "validateData: ${validateData[@]}"
+echo "metaType: ${metaType[@]}"
+for j in "${!validateData[@]}"; do
+    if [[ "${metaType[$j]}" == "int" ]]; then
+        echo "${validateData[$j]} ===> ${metaType[$j]}"
+        # Do the VAlidation Here
+    else
+        echo "${validateData[$j]} ===> ${metaType[$j]}"
+    fi
+done
+
+# echo -e "$oldValueLocation \n"
+# echo -e "$newValueLocation"
 # Check if the line was found and update the file
 if [[ -n "$oldValueLocation" ]]; then
     newValue=${newValueLocation}
