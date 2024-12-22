@@ -51,6 +51,7 @@ function UpdateMenu() {
             echo "You selected: $colName (Index: $colIndex)"
             # bshof alw al al column da PK bbasy anh Bk 3shan mnf3sh yb2a Mtkrr
             if [[ "$colName" == "${columnName[0]}" ]]; then
+            echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table"
                 . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$item"
                 echo "You are attempting to update the Primary Key (PK) column."
                 read -r -p "Enter the PrimaryKey Value: " currentValue
@@ -77,6 +78,7 @@ function UpdateMenu() {
         elif [[ "$colName" == "value" ]]; then
             #ba5od mn al User Spicific Value we a3ml Comparison Bel Awl File_Name()
             #btlob mn al user Yd5ly al value 3ala tool 3shan mfysh Select we bkarn alvalue mwgoda wala la2
+            echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table"
             . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$item"
             #echo -e "\nSelect the column to update its values:"
             echo -e "\nSelect Spicfic Record Enter 2 values PK and the value you want to Change\n"

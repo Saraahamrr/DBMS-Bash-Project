@@ -26,7 +26,7 @@ function SelectMenu() {
     columnName=($(awk -F: '{print $1}' "$metadataFile"))
     echo -e "Columns available: ${columnName[@]}"
 
-    echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
+   ##echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
     select colName in "${columnName[@]}" "Select*" "value" "Exit"; do
         if [[ "$colName" == "Exit" ]]; then
             echo "Exiting Selecting process."
@@ -41,7 +41,7 @@ function SelectMenu() {
             echo "You selected: $colName (Index: $colIndex)"
 
             if [[ "$colName" == "${columnName[0]}" ]]; then
-                echo "You are attempting to update the Primary Key (PK) column. If you leave the value empty, it will return the whole column."
+                ##echo "You are attempting to update the Primary Key (PK) column. If you leave the value empty, it will return the whole column."
                 . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh
                 read -r -p "Enter the Primary Key value: " currentValue
                 if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
