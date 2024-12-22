@@ -1,11 +1,11 @@
 #! /usr/bin/env bash
 # shopt -s extglob
-#REGEX Needed
+
 function selectDB() {
     # Prompt user to enter the table name
     echo "Enter the Number of the DataBase to Connect:"
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-    echo -e "Listing Files:\n"
+    echo -e "Listing DataBases:\n"
     select item in "${list[@]}" "Exit"; do
         if [[ "$item" == "Exit" ]]; then
             echo "Exiting program."
@@ -21,8 +21,7 @@ function selectDB() {
     if [[ -e ~/DBMS-Bash-Project/DataBase/$dbName ]] && [[ -d ~/DBMS-Bash-Project/DataBase/$dbName ]]; then
         echo "Connected To ${dbName}"
         cd "${PWD}"/"${dbName}/" 2>>/dev/null
-        . ~/DBMS-Bash-Project/Scripts/./tableMenu.sh
-
+        . ~/DBMS-Bash-Project/Scripts/tableMenu.sh  >/dev/null
     else
         echo -e "Database '$dbName' does not exist \nDo you want to Create DB?"
         read answer
