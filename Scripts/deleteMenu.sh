@@ -24,6 +24,13 @@ function SelectMenu() {
     metadataFile="${PWD}/${choice}.meta_data"
     if [[ ! -f "$metadataFile" ]]; then
         echo "Metadata file not found for $choice. Exiting."
+        echo -e "Are you sure you want to Drop the Table Named ${dbname} ? \nNOTE: knowing It doesn't have a metadata"
+          read -r answer
+          #REGEX
+          if [[ $answer == [Yy][Ee][Ss] ]]; then
+               rm -r "${PWD}/${choice}"
+               echo "Dropped Table $choice Successfully"
+          fi
         exit 1
     fi
 
