@@ -8,7 +8,7 @@ newValue=$3  # Value to replace with
 tableName=$4 # Table name (file)
 if [[ -z "$oldValue" || -z "$newValue" || -z "$tableName" || -z "$PK" ]]; then
     echo "The Value must not be empty."
-    . ~/DBMS-Bash-Project/Scripts/updateTable.sh
+    . ~/DBMS-Bash-Project/Scripts/updateMenu.sh
 fi
 # Use awk to find and modify the column value
 newValueLocation=$(
