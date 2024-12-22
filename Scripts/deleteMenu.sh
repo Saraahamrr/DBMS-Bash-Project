@@ -7,11 +7,14 @@ function SelectMenu() {
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
 
     # Dynamically present the file selection menu
-    echo -e "Listing Files:\n"
-    select item in "${list[@]}" "Exit"; do
+    select item in "${list[@]}" "Cancel" "Exit"; do
         if [[ "$item" == "Exit" ]]; then
             echo "Exiting program."
             exit 0
+        elif [[ "$item" == "Cancel" ]]; then
+            echo "You selected: $item Backing to TableMenu"
+            . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+            break
         elif [[ -n "$item" ]]; then
             echo "You selected: $item"
             tableName="${item}"
@@ -51,7 +54,7 @@ function SelectMenu() {
 
             # Check if it's the primary key column (assume first column is PK)
             if [[ "$colName" == "${columnName[0]}" ]]; then
-                . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$item"
+                "${tableValue}"
                 echo "You are attempting to delete the Primary Key (PK) column. If you leave the value empty, it will return the whole column."
                 echo "${tableValue[@]}"
                 read -r -p "Enter the Primary Key value: " currentValue
@@ -62,11 +65,11 @@ function SelectMenu() {
                 fi
             else
                 echo -e "\nListing Columns\nIf you choose a column, you will delete in that column."
-                . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$item"
+                "${tableValue}"
                 echo "You are selecting the $colName column. If you leave the value empty, it will return the whole column."
                 read -r -p "Enter the current value: " currentValue
                 if [[ -f "~/DBMS-Bash-Project/Scripts/deleteAll.sh " ]]; then
-                    ". ~/DBMS-Bash-Project/Scripts/deleteAll.sh" "$item" "$colIndex" "$currentValue"
+                    . ~/DBMS-Bash-Project/Scripts/deleteAll.sh "$item" "$colIndex" "$currentValue"
                 else
                     echo "deleteAll.sh script not found!"
                 fi

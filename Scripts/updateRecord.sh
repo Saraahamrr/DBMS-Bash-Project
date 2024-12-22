@@ -6,13 +6,6 @@ PK=$1 # Value to find
 oldValue=$2
 newValue=$3  # Value to replace with
 tableName=$4 # Table name (file)
-# Initialize variables
-# PK="87"   # Value to find
-# oldValue="Ahmed"
-# newValue="Zakria" # Value to replace with
-# tableName="TB1" # Table name (file)
-
-# Ensure the required variables are not empty
 if [[ -z "$oldValue" || -z "$newValue" || -z "$tableName" || -z "$PK" ]]; then
     echo "The Value must not be empty."
     . ~/DBMS-Bash-Project/Scripts/updateTable.sh

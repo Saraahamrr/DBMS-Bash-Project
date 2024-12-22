@@ -6,17 +6,18 @@ function UpdateMenu() {
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
     # bwry al user al list bta3t al Tables al mwgood 3shan nshlha law mwgoda bd5lha law la2 3ala alah
     echo -e "Listing Tables:\n"
-    select item in "${list[@]}" "<-Back" "Exit"; do
+    select item in "${list[@]}" "Cancel" "Exit"; do
         if [[ "$item" == "Exit" ]]; then
             echo "Exiting program."
             exit 0
+        elif [[ "$item" == "Cancel" ]]; then
+            echo "You selected: $item Backing to TableMenu"
+            . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+            break
         elif [[ -n "$item" ]]; then
             echo "You selected: $item"
             tableName="${item}"
             break
-        elif [[ "$item" == "Back" ]]; then
-            echo "Exiting program."
-            . "~/DBMS-Bash-Project/Scripts/tableMenu.sh"
         else
             echo "Invalid selection, try again."
         fi
@@ -32,12 +33,12 @@ function UpdateMenu() {
     echo -e "\nColumns available: ${columnName[@]}"
 
     echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
-    select colName in "${columnName[@]}" "value" "Exit"; do
+    select colName in "${columnName[@]}" "value" "TableMenu" "Exit"; do
         if [[ "$colName" == "Exit" ]]; then
             echo "Exiting updating process."
             break
             ################################################################################################################################
-        elif [[ -n "$colName" && "$colName" != "value" ]]; then
+        elif [[ -n "$colName" && "$colName" != "value" "$colName" != "TableMenu"  ]]; then
             # Bgyb al index Bta3 a We BRKM AL SELECT
             for i in "${!columnName[@]}"; do
                 if [[ "${columnName[$i]}" == "$colName" ]]; then
@@ -48,13 +49,13 @@ function UpdateMenu() {
             echo "You selected: $colName (Index: $colIndex)"
             # bshof alw al al column da PK bbasy anh Bk 3shan mnf3sh yb2a Mtkrr
             if [[ "$colName" == "${columnName[0]}" ]]; then
-                . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$item"
+                echo ${tableValue}
                 echo "You are attempting to update the Primary Key (PK) column."
                 read -r -p "Enter the PrimaryKey Value: " currentValue
                 read -r -p "Enter the new value: " newValue
                 #Ba5od al value we bt2kd anha F3la Mwgoda fe al file
                 #we bb3t al file bel Pk we al index 3shan ast5dmo Ka filed fe al AWK
-                ". ~/DBMS-Bash-Project/Scripts/updateAll.sh" "$colIndex" "$currentValue" "$newValue" "$item" "PK"
+                . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" "PK"
             else
                 echo "You are updating the $colName column."
                 read -r -p "Enter the current value: " currentValue
@@ -69,10 +70,17 @@ function UpdateMenu() {
                 fi
             fi
             break
+        elif [[ "$colName" == "TableMenu" ]]; then
+            if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+                . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+            else
+                echo "tableMenu.sh script not found!"
+            fi
+            break
         elif [[ "$colName" == "value" ]]; then
             #ba5od mn al User Spicific Value we a3ml Comparison Bel Awl File_Name()
             #btlob mn al user Yd5ly al value 3ala tool 3shan mfysh Select we bkarn alvalue mwgoda wala la2
-            . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$item"
+            echo ${tableValue}
             echo -e "\nSelect the column to update its values:"
             echo "Select Spicfic Record Enter 2 values PK and the value you want to Change"
             read -r -p "Enter the Primary Key value: " PK
