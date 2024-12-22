@@ -59,6 +59,6 @@ if [[ -n "$oldValueLocation" ]]; then
 
     echo "File updated successfully."
 else
-    echo "Not Found \n Might Be invalid Data"
+    echo -e "Not Found \nMight Be invalid Data"
 
 fi

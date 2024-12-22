@@ -69,7 +69,7 @@ function SelectMenu() {
             break
         elif [[ "$colName" == "value" ]]; then
             . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh
-            echo -e "\nSelect the column to update its values:"
+            #echo -e "\nSelect the column to update its values:"
             echo "Select a specific record by entering 2 values: PK and the value you want to Select ."
             read -r -p "Enter the Primary Key value: " PK
             read -r -p "Enter the current value: " currentValue
