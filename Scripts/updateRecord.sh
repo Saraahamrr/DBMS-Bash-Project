@@ -43,11 +43,9 @@ oldValueLocation=$(
     }' "${PWD}/${tableName}"
 )
 #validation
-IFS=":" read -r -a validateData <<<"${oldValueLocation}"
+IFS=":" read -r -a validateData <<<"${newValueLocation}"
 meta_data=($(awk -F: '{print $2}' "${PWD}/${tableName}.meta_data"))
 IFS=" " read -r -a metaType <<<"${meta_data[@]}"
-
-# Debug output for validation
 echo "validateData: ${validateData[@]}"
 echo "metaType: ${metaType[@]}"
 for j in "${!validateData[@]}"; do
@@ -56,6 +54,8 @@ for j in "${!validateData[@]}"; do
         # Do the VAlidation Here
     else
         echo "${validateData[$j]} ===> ${metaType[$j]}"
+        # Do the VAlidation Here
+
     fi
 done
 
@@ -66,7 +66,7 @@ if [[ -n "$oldValueLocation" ]]; then
     newValue=${newValueLocation}
     oldValue=$oldValueLocation
     # Update the file with sed, ensuring proper escaping for special characters
-    sed -i "s/${oldValueLocation}/${newValueLocation}/g" "${PWD}/${tableName}"
+    sed -i "s/${oldValueLocation}/${newValueLocation}/" "${PWD}/${tableName}"
 
     echo "File updated successfully."
 else

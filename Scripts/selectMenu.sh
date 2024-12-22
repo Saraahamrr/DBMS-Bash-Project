@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 shopt -s extglob # Enable extended pattern matching
 
 function SelectMenu() {
