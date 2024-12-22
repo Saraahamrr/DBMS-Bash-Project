@@ -21,7 +21,7 @@ function selectDB() {
     if [[ -e ~/DBMS-Bash-Project/DataBase/$dbName ]] && [[ -d ~/DBMS-Bash-Project/DataBase/$dbName ]]; then
         echo "Connected To ${dbName}"
         cd "${PWD}"/"${dbName}/" 2>>/dev/null
-        . ~/DBMS-Bash-Project/Scripts/tableMenu.sh  >/dev/null
+        . ~/DBMS-Bash-Project/Scripts/tableMenu.sh  >/dev/null #had some output we want to surpress
     else
         echo -e "Database '$dbName' does not exist \nDo you want to Create DB?"
         read answer

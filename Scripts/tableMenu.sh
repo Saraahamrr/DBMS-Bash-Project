@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 shopt -s extglob
-#REgex
+
 function tableMenu() {
     SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
     echo "${SCRIPT_DIR}"
