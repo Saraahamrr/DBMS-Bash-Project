@@ -54,30 +54,23 @@ function UpdateMenu() {
                 fi
             done
 
-            # bshof alw al column da PK bbasy anh Bk 3shan mnf3sh yb2a Mtkrr
-            echo "${tableValue[@]}"
-            echo "You selected: $colName (Index: $colIndex)"
+            # bshof alw al al column da PK bbasy anh Bk 3shan mnf3sh yb2a Mtkrr
             if [[ "$colName" == "${columnName[0]}" ]]; then
+                echo ${tableValue}
                 echo "You are attempting to update the Primary Key (PK) column."
-                read -r -p "Enter the Primary Key Value: " currentValue
+                read -r -p "Enter the PrimaryKey Value: " currentValue
                 read -r -p "Enter the new value: " newValue
-                # Ba5od al value we bt2kd anha F3la Mwgoda fe al file
-                # we bb3t al file bel Pk we al index 3shan ast5dmo Ka filed fe al AWK
-                . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" "PK"
-            else
-                echo "You are updating the $colName column."
-                read -r -p "Enter the current value: " currentValue
-                echo -e "\nNOTE: New Value Can't have spaces, Use '_' if needed\n"
-                read -r -p "Enter the new value: " newValue
-                # Ba5od al value we bt2kd anha F3la Mwgoda fe al file
-                # we bb3t al file bel index 3shan ast5dmo Ka filed fe al AWK we msh bb3t al Pk
-                if [[ -f ~/DBMS-Bash-Project/Scripts/updateAll.sh ]]; then
-                    . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$tableName"
+                #Ba5od al value we bt2kd anha F3la Mwgoda fe al file
+                #we bb3t al file bel Pk we al index 3shan ast5dmo Ka filed fe al AWK
+                if [[ ! "${newValue}" =~ ^[0-9]+$ ]]; then
+                    echo "ERROR: Value must be an integer."
+                    valid=0
                 else
-                    echo "updateAll.sh script not found!"
+                    . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" "PK"
                 fi
             fi
             break
+            #########################
         elif [[ "$colName" == "value" ]]; then
             # ba5od mn al User Spicific Value we a3ml Comparison Bel Awl File_Name()
             # btlob mn al user Yd5ly al value 3ala tool 3shan mfysh Select we bkarn alvalue mwgoda wala la2
@@ -86,12 +79,43 @@ function UpdateMenu() {
             echo "Select Specific Record. Enter 2 values: PK and the value you want to change."
             read -r -p "Enter the Primary Key value: " PK
             read -r -p "Enter the current value: " currentValue
-            echo -e "\nNOTE: New Value Can't have spaces, Use '_' if needed\n"
             read -r -p "Enter the new value: " newValue
-            . ~/DBMS-Bash-Project/Scripts/updateRecord.sh "$PK" "$currentValue" "$newValue" "$tableName"
-            break
+            for i in "${!columnName[@]}"; do
+                if [[ "${columnName[$i]}" == "$colName" ]]; then
+                    if [[ "${columnType[$i]}" == "int" && ! "$newValue" =~ ^[0-9]+$ ]]; then
+                        echo "ERROR: Value must be an integer. Update failed."
+                        continue
+                    elif [[ "${columnType[$i]}" != "int" && "$newValue" =~ ^[0-9]+$ ]]; then
+                        echo "ERROR: Value must be a string. Update failed."
+                        continue
+                    else
+                        if . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$tableName"; then
+                            echo "Update successful."
+                        else
+                            echo "ERROR: Failed to update the record."
+                        fi
+                    fi
+                fi
+            done
+                break
+            # if [[ -f ~/DBMS-Bash-Project/Scripts/updateAll.sh ]]; then
+            #     if [[ "${columnType[$i]}" == "int" && ! "${newValue}" =~ ^[0-9]+$ ]]; then
+            #         echo "ERROR: Value must be an integer."
+            #         valid=0
+            #         echo ""${newValue}" ===> "${columnType[$i]}""
+                            
+            #     elif [[ "${columnType[$i]}" != "int" && "${newValue}" =~ ^[0-9]+$ ]]; then
+            #         echo "ERROR: Value must be a string."
+            #         valid=0
+            #         echo ""${newValue}" ===> "${columnType[$i]}""
+            #     else
+            #         . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$tableName"
+            #     fi
+            # fi
+            # break
+            #########################################################
         elif [[ "$colName" == "TableMenu" ]]; then
-            if [[ -f ~/DBMS-Bash-Project/Scripts/tableMenu.sh ]]; then
+            if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
                 . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
             else
                 echo "tableMenu.sh script not found!"
@@ -102,5 +126,4 @@ function UpdateMenu() {
         fi
     done
 }
-
 UpdateMenu

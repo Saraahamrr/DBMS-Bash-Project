@@ -48,28 +48,62 @@ meta_data=($(awk -F: '{print $2}' "${PWD}/${tableName}.meta_data"))
 IFS=" " read -r -a metaType <<<"${meta_data[@]}"
 echo "validateData: ${validateData[@]}"
 echo "metaType: ${metaType[@]}"
+
+
+valid=1
 for j in "${!validateData[@]}"; do
-    if [[ "${metaType[$j]}" == "int" ]]; then
-        echo "${validateData[$j]} ===> ${metaType[$j]}"
+    #if [[ "${metaType[$j]}" == "int" ]]; then
+        #echo "${validateData[$j]} ===> ${metaType[$j]}"
         # Do the VAlidation Here
+        if [[ "${metaType[$j]}" == "int" && ! "${validateData[$j]}" =~ ^[0-9]+$ ]]; then
+                echo "ERROR: Value must be an integer."
+                valid=0
+                echo "${validateData[$j]} ===> ${metaType[$j]}"
+                break
+                
+        elif [[ "${metaType[$j]}" != "int" && "${validateData[$j]}" =~ ^[0-9]+$ ]]; then
+                echo "ERROR: Value must be a string."
+                valid=0
+                echo "${validateData[$j]} ===> ${metaType[$j]}"
+                break
+        fi
+    #else
+        #echo "${validateData[$j]} ===> ${metaType[$j]}"
+        #echo "error invalid data type"
+    #fi
+
+done
+if [[ $valid -eq 1 ]]; then
+    # echo -e "$oldValueLocation \n"
+    # echo -e "$newValueLocation"
+    # Check if the line was found and update the file
+    if [[ -n "$oldValueLocation" ]]; then
+        newValue=${newValueLocation}
+        oldValue=$oldValueLocation
+        # Update the file with sed, ensuring proper escaping for special characters
+        sed -i "s/${oldValueLocation}/${newValueLocation}/g" "${PWD}/${tableName}"
+
+        echo "File updated successfully."
     else
-        echo "${validateData[$j]} ===> ${metaType[$j]}"
-        # Do the VAlidation Here
+        echo -e "Not Found \nMight Be invalid Data"
 
     fi
-done
+    
+fi
 
 # echo -e "$oldValueLocation \n"
 # echo -e "$newValueLocation"
 # Check if the line was found and update the file
-if [[ -n "$oldValueLocation" ]]; then
-    newValue=${newValueLocation}
-    oldValue=$oldValueLocation
-    # Update the file with sed, ensuring proper escaping for special characters
-    sed -i "s/${oldValueLocation}/${newValueLocation}/" "${PWD}/${tableName}"
+# if [[ -n "$oldValueLocation" ]]; then
+#     newValue=${newValueLocation}
+#     oldValue=$oldValueLocation
+#     # Update the file with sed, ensuring proper escaping for special characters
+#     sed -i "s/${oldValueLocation}/${newValueLocation}/g" "${PWD}/${tableName}"
 
-    echo "File updated successfully."
-else
-    echo -e "Not Found \nMight Be invalid Data"
+#     echo "File updated successfully."
+# else
+#     echo -e "Not Found \nMight Be invalid Data"
 
-fi
+# fi
+
+
