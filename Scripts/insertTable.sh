@@ -15,7 +15,6 @@ insertIntoTable() {
             echo "Invalid selection, try again."
         fi
     done
-
     # Check if the table exists
     while true; do
         if [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
@@ -26,9 +25,7 @@ insertIntoTable() {
             read -r -p "Enter Table Name again: " Tname
         fi
     done
-
     echo -e "Using table: $Tname\n"
-
     # Read metadata file
     metadataFile="${PWD}/${Tname}.meta_data"
     if [[ ! -e "$metadataFile" ]]; then
@@ -36,7 +33,6 @@ insertIntoTable() {
         . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
         return 1
     fi
-
     # Read metadata lines into an array
     # IFS=$'\n' read -d '' -r -a lines < "$metadataFile"
     #  mapfile -t lines < /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB3.meta_data
@@ -60,7 +56,6 @@ insertIntoTable() {
                 echo "ERROR: Value must be a string."
                 valid=0
             fi
-
             # Validate primary key
             if [[ $colPK == "PK" ]]; then
                 while IFS= read -r record; do
@@ -74,20 +69,14 @@ insertIntoTable() {
                     fi
                 done <"${PWD}/${Tname}"
             fi
-
-            # Break loop if input is valid
             [[ $valid -eq 1 ]] && break
         done
-
-        # Add column value to the row content
         if [[ $i -eq $((numColumns - 1)) ]]; then
             tableContent+="$ColValue"
         else
             tableContent+="$ColValue:"
         fi
     done
-
-    # Append the new row to the table file
     echo "$tableContent" >>"${PWD}/${Tname}"
     echo "Data successfully inserted into table '$Tname'."
 }

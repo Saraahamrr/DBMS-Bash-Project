@@ -40,7 +40,7 @@ function selectAll() {
     elif [[ "$colIndex" == "All" ]]; then
         oldValueLocation=$(
             awk '
-            BEGIN { FS=":"; OFS="\n" }
+            BEGIN { FS=":"; OFS="/n" }
             {
                 print $0;
             }
@@ -53,7 +53,7 @@ function selectAll() {
     fi
 
     # Output the result
-    echo "$oldValueLocation"
+    OFS="\t" echo -e "$oldValueLocation"
 }
 
 # Call the function with arguments (if any)

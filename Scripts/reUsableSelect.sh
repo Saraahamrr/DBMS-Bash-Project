@@ -3,7 +3,7 @@ shopt -s extglob # Enable extended pattern matching
 
 function reUsableSelect() {
     tableName="$1" # Example: Table name (file)
-    colIndex="All"
+    colIndex="selectAll"
     if [[ -z "$tableName" || -z "$colIndex" ]]; then
         echo "Error: Table name and column index must not be empty."
         . ~/DBMS-Bash-Project/Scripts/selectMenu.sh
@@ -14,7 +14,7 @@ function reUsableSelect() {
         return 1
     fi
 
-    if [[ "$colIndex" == "All" ]]; then
+    if [[ "$colIndex" == "selectAll" ]]; then
         currentValueLocation=$(
             awk '
             BEGIN { FS=":"; OFS="\n" }
