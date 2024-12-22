@@ -1,180 +1,278 @@
-# # # # #! /bin/bash
-# # # # # # #    read -r -p  "Enter Table Name :" Tname
-# # # # # #         # if [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]] ; then
-# # # # # #         #     echo "Table '$Tname' already exists."
-# # # # # #         #     . /home/zalabany/DBMS-Bash-Project/Scripts/createTable.sh
-# # # # # #         # fi
-# # # # # #             # if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
-# # # # # #             #     break
-# # # # # #             # else
-# # # # # #             #     echo "Invalid input. Please enter a positive integer for the column count."
-# # # # # #             # fi
+# # # # # #! /bin/bash
+# # # # # # # #    read -r -p  "Enter Table Name :" Tname
+# # # # # # #         # if [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]] ; then
+# # # # # # #         #     echo "Table '$Tname' already exists."
+# # # # # # #         #     . /home/zalabany/DBMS-Bash-Project/Scripts/createTable.sh
+# # # # # # #         # fi
+# # # # # # #             # if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
+# # # # # # #             #     break
+# # # # # # #             # else
+# # # # # # #             #     echo "Invalid input. Please enter a positive integer for the column count."
+# # # # # # #             # fi
 
-# # # # # # read  -p "Enter 2 values :\n" v1 
-# # # # # # echo $v1 
-# # # # # # # #! /usr/bin/bash
-# # # # # # # tableExist(){
-# # # # # # #         local Tname="$1"
-# # # # # # #     while true ;do
-# # # # # # #     echo "Checking..."
-# # # # # # #   if [[  -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
-# # # # # # #         echo "Proceed WIth Inserting"
-# # # # # # #         break
-# # # # # # #         else 
-# # # # # # #             # Table Dosen't exists 
-# # # # # # #             echo "Table '$Tname' Dosen't exists. Choose another name."
-# # # # # # #             read -r -p "Enter Table Name again: " Tname
-# # # # # # #             continue
-# # # # # # #         fi
-# # # # # # #         done
+# # # # # # # read  -p "Enter 2 values :\n" v1 
+# # # # # # # echo $v1 
+# # # # # # # # #! /usr/bin/bash
+# # # # # # # # tableExist(){
+# # # # # # # #         local Tname="$1"
+# # # # # # # #     while true ;do
+# # # # # # # #     echo "Checking..."
+# # # # # # # #   if [[  -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
+# # # # # # # #         echo "Proceed WIth Inserting"
+# # # # # # # #         break
+# # # # # # # #         else 
+# # # # # # # #             # Table Dosen't exists 
+# # # # # # # #             echo "Table '$Tname' Dosen't exists. Choose another name."
+# # # # # # # #             read -r -p "Enter Table Name again: " Tname
+# # # # # # # #             continue
+# # # # # # # #         fi
+# # # # # # # #         done
 
-# # # # # # # }
-# # # # # # # function insertIntoTable() {
+# # # # # # # # }
+# # # # # # # # function insertIntoTable() {
     
-# # # # # # #     read -r -p "Enter Table Name " Tname
-# # # # # # #     tableExist "${Tname}"
-# # # # # # #        #Dynamic Location SomeHow
-# # # # # # #      IFS=$'\n' read -d '' -r -a lines < "${PWD}/${Tname}.meta_data" 
-# # # # # # #     #  mapfile -t lines < /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB3.meta_data
-# # # # # # #     #  lines=($(awk '{print $0}' /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB3.meta_data))
-# # # # # # #         End=$(( ${#lines[@]} - 1 ))
-# # # # # # #         tableContent=""  #loop The Lines (Lines Contains The MetaData That The user Put in the Create Table Section)
-# # # # # # #         for i in "${!lines[@]}";do 
-# # # # # # #         echo $i
-# # # # # # #         #Change The field Seperator To  + Accept The Value As Array: Instead of the Default Note: Default  IFS That is " "
-# # # # # # #         IFS=':' read -r -a columnContent <<< "${lines[i]}";
+# # # # # # # #     read -r -p "Enter Table Name " Tname
+# # # # # # # #     tableExist "${Tname}"
+# # # # # # # #        #Dynamic Location SomeHow
+# # # # # # # #      IFS=$'\n' read -d '' -r -a lines < "${PWD}/${Tname}.meta_data" 
+# # # # # # # #     #  mapfile -t lines < /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB3.meta_data
+# # # # # # # #     #  lines=($(awk '{print $0}' /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB3.meta_data))
+# # # # # # # #         End=$(( ${#lines[@]} - 1 ))
+# # # # # # # #         tableContent=""  #loop The Lines (Lines Contains The MetaData That The user Put in the Create Table Section)
+# # # # # # # #         for i in "${!lines[@]}";do 
+# # # # # # # #         echo $i
+# # # # # # # #         #Change The field Seperator To  + Accept The Value As Array: Instead of the Default Note: Default  IFS That is " "
+# # # # # # # #         IFS=':' read -r -a columnContent <<< "${lines[i]}";
             
-# # # # # # #         colName=${columnContent[0]};
-# # # # # # #         colDataType=${columnContent[1]};
-# # # # # # #         colPK=${columnContent[2]};
+# # # # # # # #         colName=${columnContent[0]};
+# # # # # # # #         colDataType=${columnContent[1]};
+# # # # # # # #         colPK=${columnContent[2]};
 
-# # # # # # #         #test flags
-# # # # # # #         dataTypeFlag=0; #true
-# # # # # # #         pkFlag=0;   #true
+# # # # # # # #         #test flags
+# # # # # # # #         dataTypeFlag=0; #true
+# # # # # # # #         pkFlag=0;   #true
 
-# # # # # # #         #read new column value from user
-# # # # # # #         read -r -p "Enter $colName: " ColValue;
-# # # # # # #         numRegex='^[0-9]+$'
-# # # # # # #         # validate dataType
-# # # # # # #         if [[ $colDataType == "int" ]]; then
-# # # # # # #             if ! [[ $ColValue =~ $numRegex ]]; then
-# # # # # # #                 dataTypeFlag=1; #false1
-# # # # # # #                 errorFlag=1; #false
-# # # # # # #                 echo "ERROR: Value must be a Intergar.";
-# # # # # # #             fi 
-# # # # # # #         fi
+# # # # # # # #         #read new column value from user
+# # # # # # # #         read -r -p "Enter $colName: " ColValue;
+# # # # # # # #         numRegex='^[0-9]+$'
+# # # # # # # #         # validate dataType
+# # # # # # # #         if [[ $colDataType == "int" ]]; then
+# # # # # # # #             if ! [[ $ColValue =~ $numRegex ]]; then
+# # # # # # # #                 dataTypeFlag=1; #false1
+# # # # # # # #                 errorFlag=1; #false
+# # # # # # # #                 echo "ERROR: Value must be a Intergar.";
+# # # # # # # #             fi 
+# # # # # # # #         fi
 
-# # # # # # #         # validate if PK
-# # # # # # #         if [[ $colPK -eq "PK" ]]; then
-# # # # # # #             # get all column data from Data/tableName
-# # # # # # #             IFS=$'\n' read -d '' -r -a idCheck < "${PWD}/${Tname}"  #
+# # # # # # # #         # validate if PK
+# # # # # # # #         if [[ $colPK -eq "PK" ]]; then
+# # # # # # # #             # get all column data from Data/tableName
+# # # # # # # #             IFS=$'\n' read -d '' -r -a idCheck < "${PWD}/${Tname}"  #
             
-# # # # # # #             #loop over column data to check pk if unique 
-# # # # # # #             for j in "${!idCheck[@]}";do
-# # # # # # #                 IFS=':' read -r -a record <<< "${idCheck[$j]}"; # split Record Into Pieces To Check Line By LIne
-# # # # # # #                 if [[ ${record[$i]} -eq $ColValue ]]; then
-# # # # # # #                     pkFlag=1; #false(not-unique)
-# # # # # # #                     echo "${record[$i]} ${idCheck}"
-# # # # # # #                     errorFlag=1; #false
-# # # # # # #                     echo "ERROR: Primary key must be unique.";
-# # # # # # #                     read -r -p "Enter ${colName} again: " ColValue
+# # # # # # # #             #loop over column data to check pk if unique 
+# # # # # # # #             for j in "${!idCheck[@]}";do
+# # # # # # # #                 IFS=':' read -r -a record <<< "${idCheck[$j]}"; # split Record Into Pieces To Check Line By LIne
+# # # # # # # #                 if [[ ${record[$i]} -eq $ColValue ]]; then
+# # # # # # # #                     pkFlag=1; #false(not-unique)
+# # # # # # # #                     echo "${record[$i]} ${idCheck}"
+# # # # # # # #                     errorFlag=1; #false
+# # # # # # # #                     echo "ERROR: Primary key must be unique.";
+# # # # # # # #                     read -r -p "Enter ${colName} again: " ColValue
 
-# # # # # # #                 fi
-# # # # # # #             done
-# # # # # # #         fi
+# # # # # # # #                 fi
+# # # # # # # #             done
+# # # # # # # #         fi
 
-# # # # # # #         if [[ $i -eq $End  ]] ;then
-# # # # # # #          tableContent+="${ColValue}"
-# # # # # # #          else
-# # # # # # #          tableContent+="${ColValue}:"
-# # # # # # #              fi
-# # # # # # # done
+# # # # # # # #         if [[ $i -eq $End  ]] ;then
+# # # # # # # #          tableContent+="${ColValue}"
+# # # # # # # #          else
+# # # # # # # #          tableContent+="${ColValue}:"
+# # # # # # # #              fi
+# # # # # # # # done
 
   
-# # # # # # #  echo -e "${tableContent}" >> ${PWD}/${Tname}
+# # # # # # # #  echo -e "${tableContent}" >> ${PWD}/${Tname}
 
-# # # # # # # }
-# # # # # # # insertIntoTable
+# # # # # # # # }
+# # # # # # # # insertIntoTable
 
-# # # # # # #     # print "Enter The Data you Want To insert :" $1
+# # # # # # # #     # print "Enter The Data you Want To insert :" $1
 
-# # # # # # #     # printf "Enter The Data you Want To insert :"
-# # # # # # #     # getline colname 
+# # # # # # # #     # printf "Enter The Data you Want To insert :"
+# # # # # # # #     # getline colname 
 
-# # # # # # #!/usr/bin/bash
-# # # # # # # shopt -s extglob # Enable extended pattern matching
-# # # # # # # # Function to validate column count
-# # # # # # # function createTableContent() {
-# # # # # # #     local colNum="$1"
-# # # # # # #     while true; do
-# # # # # # #         # Validate that the input is a positive integer
-# # # # # # #         if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
-# # # # # # #             break
-# # # # # # #         else
-# # # # # # #             echo "Invalid input. Please enter a positive integer for the column count."
-# # # # # # #             read -r -p "Enter column count again: " colNum
-# # # # # # #       fi
-# # # # # # #     done
-# # # # # # # }
-# # # # # # # # Function to create a table
-# # # # # # # function createTable() {
-# # # # # # #     PS1="Select Option: "
-# # # # # # #     while true; do
-# # # # # # #         # Prompt user for the table name
-# # # # # # #         read -r -p "Enter Table Name: " Tname
-# # # # # # #         if [[ ! -e "${PWD}/$Tname" ]]; then
-# # # # # # #             # Table doesn't exist, proceed to create it
-# # # # # # #             read -r -p "Enter ${Tname} Columns Number: " colNum
-# # # # # # #             createTableContent "$colNum" # Validate column count
-# # # # # # #             echo -e "Creating table '$Tname' with $colNum columns..."
-# # # # # # #             break
-# # # # # # #         elif [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
-# # # # # # #             # Table already exists as a file
-# # # # # # #             echo "Table '$Tname' already exists. Choose another name."
-# # # # # # #         else
-# # # # # # #             # Table exists as a directory
-# # # # # # #             echo "'$Tname' exists as a directory. Recreating your table as a file..."
-# # # # # # #             rm -r "${PWD}/$Tname" # Remove the directory
-# # # # # # #             read -r -p "Enter Columns Number: " colNum
-# # # # # # #             createTableContent "$colNum" # Validate column count
-# # # # # # #             echo -e "Creating table '$Tname' with $colNum columns..."
-# # # # # # #             break
-# # # # # # #         fi
-# # # # # # #     done
-# # # # # # # #-----------------------------------------------------------------------------------------------------------------
-# # # # # # #         declare -i num=0
-# # # # # # #         pkFlag=0
-# # # # # # #         tableSchema="" 
-# # # # # # #         echo "The first column will be the Primary Key (PK)."W
-# # # # # # #         while ((num < colNum)); do
-# # # # # # #             echo "Enter Column $((num + 1)) Name:"
-# # # # # # #             read -r colName
-# # # # # # #             if [[ ! $colName =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-# # # # # # #                 echo "Invalid column name. Use letters, numbers, and underscores only."
-# # # # # # #                 continue
+# # # # # # # #!/usr/bin/bash
+# # # # # # # # shopt -s extglob # Enable extended pattern matching
+# # # # # # # # # Function to validate column count
+# # # # # # # # function createTableContent() {
+# # # # # # # #     local colNum="$1"
+# # # # # # # #     while true; do
+# # # # # # # #         # Validate that the input is a positive integer
+# # # # # # # #         if [[ $colNum =~ ^[1-9][0-9]*$ ]]; then
+# # # # # # # #             break
+# # # # # # # #         else
+# # # # # # # #             echo "Invalid input. Please enter a positive integer for the column count."
+# # # # # # # #             read -r -p "Enter column count again: " colNum
+# # # # # # # #       fi
+# # # # # # # #     done
+# # # # # # # # }
+# # # # # # # # # Function to create a table
+# # # # # # # # function createTable() {
+# # # # # # # #     PS1="Select Option: "
+# # # # # # # #     while true; do
+# # # # # # # #         # Prompt user for the table name
+# # # # # # # #         read -r -p "Enter Table Name: " Tname
+# # # # # # # #         if [[ ! -e "${PWD}/$Tname" ]]; then
+# # # # # # # #             # Table doesn't exist, proceed to create it
+# # # # # # # #             read -r -p "Enter ${Tname} Columns Number: " colNum
+# # # # # # # #             createTableContent "$colNum" # Validate column count
+# # # # # # # #             echo -e "Creating table '$Tname' with $colNum columns..."
+# # # # # # # #             break
+# # # # # # # #         elif [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
+# # # # # # # #             # Table already exists as a file
+# # # # # # # #             echo "Table '$Tname' already exists. Choose another name."
+# # # # # # # #         else
+# # # # # # # #             # Table exists as a directory
+# # # # # # # #             echo "'$Tname' exists as a directory. Recreating your table as a file..."
+# # # # # # # #             rm -r "${PWD}/$Tname" # Remove the directory
+# # # # # # # #             read -r -p "Enter Columns Number: " colNum
+# # # # # # # #             createTableContent "$colNum" # Validate column count
+# # # # # # # #             echo -e "Creating table '$Tname' with $colNum columns..."
+# # # # # # # #             break
+# # # # # # # #         fi
+# # # # # # # #     done
+# # # # # # # # #-----------------------------------------------------------------------------------------------------------------
+# # # # # # # #         declare -i num=0
+# # # # # # # #         pkFlag=0
+# # # # # # # #         tableSchema="" 
+# # # # # # # #         echo "The first column will be the Primary Key (PK)."W
+# # # # # # # #         while ((num < colNum)); do
+# # # # # # # #             echo "Enter Column $((num + 1)) Name:"
+# # # # # # # #             read -r colName
+# # # # # # # #             if [[ ! $colName =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+# # # # # # # #                 echo "Invalid column name. Use letters, numbers, and underscores only."
+# # # # # # # #                 continue
+# # # # # # # #             fi
+# # # # # # # #             echo "Enter Column $((num + 1)) Datatype (int/str):"
+# # # # # # # #             read -r colType
+# # # # # # # #             if [[ $colType != "int" && $colType != "str" ]]; then
+# # # # # # # #                 echo "Invalid datatype. Only 'int' or 'str' are allowed."
+# # # # # # # #                 continue #Re Ask for The Data Type
+# # # # # # # #             fi
+# # # # # # # #             if [[ $pkFlag -eq 0 ]]; then
+# # # # # # # #                 tableSchema+="${colName}:${colType}:PK\n" #MetaData FIle
+# # # # # # # #                 pkFlag=1
+# # # # # # # #             else
+# # # # # # # #                 tableSchema+="$colName:$colType\n"
+# # # # # # # #             fi
+# # # # # # # #             ((num++))
+# # # # # # # #         done
+# # # # # # # #         touch   "${Tname}.meta_data"
+# # # # # # # #         touch   "${Tname}"
+# # # # # # # #         echo -e "${tableSchema}" > "${Tname}.meta_data"
+# # # # # # # #         echo -e "Table ${Tname} Successfuly Created"
+# # # # # # # # }
+# # # # # # # # createTable
+# # # # # # # echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
+
+# # # # # # # select colName in "${columnName[@]}" "value" "Exit"; do
+# # # # # # #     if [[ "$colName" == "Exit" ]]; then
+# # # # # # #         echo "Exiting updating process."
+# # # # # # #         break
+# # # # # # #     elif [[ -n "$colName" && "$colName" != "value" ]]; then
+# # # # # # #         # Find the index of the selected column
+# # # # # # #         for i in "${!columnName[@]}"; do
+# # # # # # #             if [[ "${columnName[$i]}" == "$colName" ]]; then
+# # # # # # #                 colIndex=$i
+# # # # # # #                 break
 # # # # # # #             fi
-# # # # # # #             echo "Enter Column $((num + 1)) Datatype (int/str):"
-# # # # # # #             read -r colType
-# # # # # # #             if [[ $colType != "int" && $colType != "str" ]]; then
-# # # # # # #                 echo "Invalid datatype. Only 'int' or 'str' are allowed."
-# # # # # # #                 continue #Re Ask for The Data Type
-# # # # # # #             fi
-# # # # # # #             if [[ $pkFlag -eq 0 ]]; then
-# # # # # # #                 tableSchema+="${colName}:${colType}:PK\n" #MetaData FIle
-# # # # # # #                 pkFlag=1
-# # # # # # #             else
-# # # # # # #                 tableSchema+="$colName:$colType\n"
-# # # # # # #             fi
-# # # # # # #             ((num++))
 # # # # # # #         done
-# # # # # # #         touch   "${Tname}.meta_data"
-# # # # # # #         touch   "${Tname}"
-# # # # # # #         echo -e "${tableSchema}" > "${Tname}.meta_data"
-# # # # # # #         echo -e "Table ${Tname} Successfuly Created"
-# # # # # # # }
-# # # # # # # createTable
-# # # # # # echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
 
+# # # # # # #         echo "You selected: $colName (Index: $colIndex)"
+# # # # # # #         if [[ "$colName" == "${columnName[0]}" ]]; then
+# # # # # # #             echo "You will update the $colName column."
+# # # # # # #             read -r -p "Enter the Primary Key value: " currentValue
+# # # # # # #             read -r -p "Enter the new value: " newValue
+# # # # # # #         else
+# # # # # # #             read -r -p "Enter the current value: " currentValue
+# # # # # # #             read -r -p "Enter the new value: " newValue
+# # # # # # #         fi
+# # # # # # #         break
+# # # # # # #     elif [[ "$colName" == "value" ]]; then
+# # # # # # #         echo -e "\nSelect the column to update its values:"
+# # # # # # #         select valueColumn in "${columnName[@]}" "Exit"; do
+# # # # # # #             if [[ "$valueColumn" == "Exit" ]]; then
+# # # # # # #                 echo "Exiting program."
+# # # # # # #                 break
+# # # # # # #             elif [[ -n "$valueColumn" ]]; then
+# # # # # # #                 # Find the index of the selected column
+# # # # # # #                 for i in "${!columnName[@]}"; do
+# # # # # # #                     if [[ "${columnName[$i]}" == "$valueColumn" ]]; then
+# # # # # # #                         colIndex=$i
+# # # # # # #                         break
+# # # # # # #                     fi
+# # # # # # #                 done
+
+# # # # # # #                 echo "You selected column: $valueColumn (Index: $colIndex)"
+# # # # # # #                 read -r -p "Enter the current value: " currentValue
+# # # # # # #                 read -r -p "Enter the new value: " newValue
+# # # # # # #                 echo "Updating $valueColumn: $currentValue -> $newValue"
+# # # # # # #                 # Add the actual update logic here if needed
+# # # # # # #                 break
+# # # # # # #             else
+# # # # # # #                 echo "Invalid selection, try again."
+# # # # # # #             fi
+# # # # # # #         done
+# # # # # # #         break
+# # # # # # #     else
+# # # # # # #         echo "Invalid selection, try again."
+# # # # # # #     fi
+# # # # # # # done
+
+# # # # # # # awk -F : -v colIndex="${colIndex}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
+# # # # # # # {
+# # # # # # #     if ($colIndex == oldValue) {
+# # # # # # #         $colIndex = newValue
+# # # # # # #         print $0
+# # # # # # #     }
+# # # # # # # }' }' /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB1 > /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB1.tmp && mv /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB1.tmp /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB1
+
+# # # # # # #     # print $colIndex
+# # # # # # # # print $colIndex
+# # # # # # # # echo $colIndex $colValue
+# # # # # # #!/bin/bash
+# # # # # # shopt -s extglob # Enable extended pattern matching
+# # # # # # function UpdateMenu(){
+# # # # # # # List files in the current directory, excluding `.meta_data` files
+# # # # # # list=($(ls "${PWD}" | grep -v '\.meta_data$'))
+# # # # # # # Dynamically present the file selection menu
+# # # # # # echo -e "Listing Files:\n"
+# # # # # # select item in "${list[@]}" "Exit"; do
+# # # # # #     if [[ "$item" == "Exit" ]]; then
+# # # # # #         echo "Exiting program."
+# # # # # #         exit 0
+# # # # # #     elif [[ -n "$item" ]]; then
+# # # # # #         echo "You selected: $item"
+# # # # # #         choice="${item}"
+# # # # # #         break  
+# # # # # #     else
+# # # # # #         echo "Invalid selection, try again."
+# # # # # #     fi
+# # # # # # done
+
+# # # # # # # Construct the metadata file path
+# # # # # # metadataFile="${PWD}/${choice}.meta_data"
+# # # # # # if [[ ! -f "$metadataFile" ]]; then
+# # # # # #     echo "Metadata file not found for $choice. Exiting."
+# # # # # #     exit 1
+# # # # # # fi
+
+# # # # # # # Read column names from the metadata file
+# # # # # # columnName=($(awk -F: '{print $1}' "$metadataFile"))
+# # # # # # echo -e "Columns available: ${columnName[@]}"
+
+# # # # # # # Main column selection menu
+# # # # # # echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
 # # # # # # select colName in "${columnName[@]}" "value" "Exit"; do
 # # # # # #     if [[ "$colName" == "Exit" ]]; then
 # # # # # #         echo "Exiting updating process."
@@ -186,16 +284,20 @@
 # # # # # #                 colIndex=$i
 # # # # # #                 break
 # # # # # #             fi
-# # # # # #         done
-
+# # # # # #         done 
 # # # # # #         echo "You selected: $colName (Index: $colIndex)"
+        
+# # # # # #         # Check if it's the primary key column (assume first column is PK)
 # # # # # #         if [[ "$colName" == "${columnName[0]}" ]]; then
-# # # # # #             echo "You will update the $colName column."
-# # # # # #             read -r -p "Enter the Primary Key value: " currentValue
+# # # # # #             echo "You are attempting to update the Primary Key (PK) column."
+# # # # # #             read -r -p "Enter the PrimaryKey Value: " currentValue
 # # # # # #             read -r -p "Enter the new value: " newValue
 # # # # # #         else
+# # # # # #             echo "You are updating the $colName column."
 # # # # # #             read -r -p "Enter the current value: " currentValue
 # # # # # #             read -r -p "Enter the new value: " newValue
+# # # # # #             . ~/DBMS-Bash-Project/Scripts/updateRecord.sh "$colIndex" "$currentValue" "$newValue" "$item"
+
 # # # # # #         fi
 # # # # # #         break
 # # # # # #     elif [[ "$colName" == "value" ]]; then
@@ -211,255 +313,264 @@
 # # # # # #                         colIndex=$i
 # # # # # #                         break
 # # # # # #                     fi
-# # # # # #                 done
-
+# # # # # #                 done 
 # # # # # #                 echo "You selected column: $valueColumn (Index: $colIndex)"
 # # # # # #                 read -r -p "Enter the current value: " currentValue
 # # # # # #                 read -r -p "Enter the new value: " newValue
 # # # # # #                 echo "Updating $valueColumn: $currentValue -> $newValue"
 # # # # # #                 # Add the actual update logic here if needed
-# # # # # #                 break
+# # # # # #                 break  
 # # # # # #             else
 # # # # # #                 echo "Invalid selection, try again."
 # # # # # #             fi
-# # # # # #         done
+# # # # # #      done
 # # # # # #         break
 # # # # # #     else
 # # # # # #         echo "Invalid selection, try again."
 # # # # # #     fi
 # # # # # # done
+# # # # # # }
+# # # # # # UpdateMenu
 
-# # # # # # awk -F : -v colIndex="${colIndex}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
-# # # # # # {
-# # # # # #     if ($colIndex == oldValue) {
-# # # # # #         $colIndex = newValue
-# # # # # #         print $0
-# # # # # #     }
-# # # # # # }' }' /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB1 > /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB1.tmp && mv /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB1.tmp /home/zalabany/DBMS-Bash-Project/DataBase/DB1/TB1
+# # # # # # #!/bin/bash
+# # # # # # shopt -s extglob # Enable extended pattern matching
+# # # # # # # Initialize variables
+# # # # # # colIndex=$(($1+1))  # Example column index, update as needed
+# # # # # # oldValue=$2
+# # # # # # newValue=$3
+# # # # # # tableName=$4
+# # # # # # echo  $colIndex $oldValue $newValue $tableName
+# # # # # # # Ensure the required variables are not empty
+# # # # # # if [[ -z $oldValue && -z $colIndex && -z $newValue && -z $tableName ]]; then
+# # # # # #     echo "The 3 Values Mustn't Be Empty"
+# # # # # #     exit 1
+# # # # # # fi
 
-# # # # # #     # print $colIndex
-# # # # # # # print $colIndex
-# # # # # # # echo $colIndex $colValue
+# # # # # # # Use awk to find and modify the column value
+# # # # # # oldValueLocation=$(
+# # # # # #     awk -v colIndex="${colIndex}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
+# # # # # #     BEGIN { FS = ":"; OFS = ":" }
+# # # # # #     {
+# # # # # #         if ($colIndex == oldValue) {
+# # # # # #             $colIndex = newValue  # Update the value in the column
+# # # # # #             print $0  # Print the modified line
+# # # # # #         }
+# # # # # #     }' /home/zalabany/DBMS-Bash-Project/DataBase/DB1/$tableName
+# # # # # # )
+
+# # # # # # # Check if the line is found and update the file
+# # # # # # echo "${oldValueLocation}"
+# # # # # # if [[ ! -z $oldValueLocation ]]; then
+# # # # # #     # echo -e "Line Found Updating To ---> \n$oldValueLocation"
+
+# # # # # #     # Use sed to update the file
+# # # # # #     sed -i "s/${oldValue}/${newValue}/g" /home/zalabany/DBMS-Bash-Project/DataBase/DB1/$tableName
+
+# # # # # #     echo "File updated successfully."
+# # # # # # else
+# # # # # #     echo "Not Found"
+# # # # # # fi
+# # # # # --------------------------------------------------------------------------------------------------------------------
 # # # # # #!/bin/bash
 # # # # # shopt -s extglob # Enable extended pattern matching
+
 # # # # # function UpdateMenu(){
-# # # # # # List files in the current directory, excluding `.meta_data` files
-# # # # # list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-# # # # # # Dynamically present the file selection menu
-# # # # # echo -e "Listing Files:\n"
-# # # # # select item in "${list[@]}" "Exit"; do
-# # # # #     if [[ "$item" == "Exit" ]]; then
-# # # # #         echo "Exiting program."
-# # # # #         exit 0
-# # # # #     elif [[ -n "$item" ]]; then
-# # # # #         echo "You selected: $item"
-# # # # #         choice="${item}"
-# # # # #         break  
-# # # # #     else
-# # # # #         echo "Invalid selection, try again."
-# # # # #     fi
-# # # # # done
-
-# # # # # # Construct the metadata file path
-# # # # # metadataFile="${PWD}/${choice}.meta_data"
-# # # # # if [[ ! -f "$metadataFile" ]]; then
-# # # # #     echo "Metadata file not found for $choice. Exiting."
-# # # # #     exit 1
-# # # # # fi
-
-# # # # # # Read column names from the metadata file
-# # # # # columnName=($(awk -F: '{print $1}' "$metadataFile"))
-# # # # # echo -e "Columns available: ${columnName[@]}"
-
-# # # # # # Main column selection menu
-# # # # # echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
-# # # # # select colName in "${columnName[@]}" "value" "Exit"; do
-# # # # #     if [[ "$colName" == "Exit" ]]; then
-# # # # #         echo "Exiting updating process."
-# # # # #         break
-# # # # #     elif [[ -n "$colName" && "$colName" != "value" ]]; then
-# # # # #         # Find the index of the selected column
-# # # # #         for i in "${!columnName[@]}"; do
-# # # # #             if [[ "${columnName[$i]}" == "$colName" ]]; then
-# # # # #                 colIndex=$i
-# # # # #                 break
-# # # # #             fi
-# # # # #         done 
-# # # # #         echo "You selected: $colName (Index: $colIndex)"
-        
-# # # # #         # Check if it's the primary key column (assume first column is PK)
-# # # # #         if [[ "$colName" == "${columnName[0]}" ]]; then
-# # # # #             echo "You are attempting to update the Primary Key (PK) column."
-# # # # #             read -r -p "Enter the PrimaryKey Value: " currentValue
-# # # # #             read -r -p "Enter the new value: " newValue
+# # # # #     # List files in the current directory, excluding `.meta_data` files
+# # # # #     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
+    
+# # # # #     # Dynamically present the file selection menu
+# # # # #     echo -e "Listing Files:\n"
+# # # # #     select item in "${list[@]}" "Exit"; do
+# # # # #         if [[ "$item" == "Exit" ]]; then
+# # # # #             echo "Exiting program."
+# # # # #             exit 0
+# # # # #         elif [[ -n "$item" ]]; then
+# # # # #             echo "You selected: $item"
+# # # # #             choice="${item}"
+# # # # #             break  
 # # # # #         else
-# # # # #             echo "You are updating the $colName column."
-# # # # #             read -r -p "Enter the current value: " currentValue
-# # # # #             read -r -p "Enter the new value: " newValue
-# # # # #             . ~/DBMS-Bash-Project/Scripts/updateRecord.sh "$colIndex" "$currentValue" "$newValue" "$item"
-
+# # # # #             echo "Invalid selection, try again."
 # # # # #         fi
-# # # # #         break
-# # # # #     elif [[ "$colName" == "value" ]]; then
-# # # # #         echo -e "\nSelect the column to update its values:"
-# # # # #         select valueColumn in "${columnName[@]}" "Exit"; do
-# # # # #             if [[ "$valueColumn" == "Exit" ]]; then
-# # # # #                 echo "Exiting program."
-# # # # #                 break
-# # # # #             elif [[ -n "$valueColumn" ]]; then
-# # # # #                 # Find the index of the selected column
-# # # # #                 for i in "${!columnName[@]}"; do
-# # # # #                     if [[ "${columnName[$i]}" == "$valueColumn" ]]; then
-# # # # #                         colIndex=$i
-# # # # #                         break
-# # # # #                     fi
-# # # # #                 done 
-# # # # #                 echo "You selected column: $valueColumn (Index: $colIndex)"
+# # # # #     done
+
+# # # # #     # Construct the metadata file path
+# # # # #     metadataFile="${PWD}/${choice}.meta_data"
+# # # # #     if [[ ! -f "$metadataFile" ]]; then
+# # # # #         echo "Metadata file not found for $choice. Exiting."
+# # # # #         exit 1
+# # # # #     fi
+
+# # # # #     # Read column names from the metadata file
+# # # # #     columnName=($(awk -F: '{print $1}' "$metadataFile"))
+# # # # #     echo -e "Columns available: ${columnName[@]}"
+
+# # # # #     # Main column selection menu
+# # # # #     echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
+# # # # #     select colName in "${columnName[@]}" "value" "Exit"; do
+# # # # #         if [[ "$colName" == "Exit" ]]; then
+# # # # #             echo "Exiting updating process."
+# # # # #             break
+# # # # #         elif [[ -n "$colName" && "$colName" != "value" ]]; then
+# # # # #             # Find the index of the selected column
+# # # # #             for i in "${!columnName[@]}"; do
+# # # # #                 if [[ "${columnName[$i]}" == "$colName" ]]; then
+# # # # #                     colIndex=$i
+# # # # #                     break
+# # # # #                 fi
+# # # # #             done 
+# # # # #             echo "You selected: $colName (Index: $colIndex)"
+            
+# # # # #             # Check if it's the fprimary key column (assume first column is PK)
+# # # # #             if [[ "$colName" == "${columnName[0]}" ]]; then
+# # # # #                 echo "You are attempting to update the Primary Key (PK) column."
+# # # # #                 read -r -p "Enter the PrimaryKey Value: " currentValue
+# # # # #                 read -r -p "Enter the new value: " newValue
+
+# # # # #                 # if [[  "$newValue" ]]
+# # # # #                 . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" "PK"
+# # # # #             else
+# # # # #                 echo "You are updating the $colName column."
 # # # # #                 read -r -p "Enter the current value: " currentValue
 # # # # #                 read -r -p "Enter the new value: " newValue
-# # # # #                 echo "Updating $valueColumn: $currentValue -> $newValue"
-# # # # #                 # Add the actual update logic here if needed
-# # # # #                 break  
-# # # # #             else
-# # # # #                 echo "Invalid selection, try again."
+                
+# # # # #                 # Check if updateRecord.sh exists and source it
+# # # # #                 if [[ -f ~/DBMS-Bash-Project/Scripts/updateAll.sh ]]; then
+# # # # #                     . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" 
+# # # # #                 else
+# # # # #                     echo "updateRecord.sh script not found!"
+# # # # #                 fi
 # # # # #             fi
-# # # # #      done
-# # # # #         break
-# # # # #     else
-# # # # #         echo "Invalid selection, try again."
-# # # # #     fi
-# # # # # done
+# # # # #             break
+# # # # #         elif [[ "$colName" == "value" ]]; then
+# # # # #             echo -e "\nSelect the column to update its values:"
+# # # # #            for i in "${!columnName[@]}"; do
+# # # # #                 if [[ "${columnName[$i]}" == "$colName" ]]; then
+# # # # #                     colIndex=$i
+# # # # #                     break
+# # # # #                 fi
+# # # # #             done 
+# # # # #                     echo "Select Spicfic Record Enter 2 values PK and the value you want to Change"
+# # # # #                     read -r -p "Enter the Primary Key value: " PK
+# # # # #                     read -r -p "Enter the current value: " currentValue
+# # # # #                     read -r -p "Enter the new value : " newValue
+# # # # #                     . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" 
+                
+# # # # #                     # Add the actual update logic here if needed
+# # # # #                     break  
+# # # # #                 else
+# # # # #                     echo "Invalid selection, try again."
+# # # # #                 fi
+# # # # #             break
+# # # # #         else
+# # # # #             echo "Invalid selection, try again."
+# # # # #         fi
+# # # # #     done
 # # # # # }
+
 # # # # # UpdateMenu
-
-# # # # # #!/bin/bash
-# # # # # shopt -s extglob # Enable extended pattern matching
-# # # # # # Initialize variables
-# # # # # colIndex=$(($1+1))  # Example column index, update as needed
-# # # # # oldValue=$2
-# # # # # newValue=$3
-# # # # # tableName=$4
-# # # # # echo  $colIndex $oldValue $newValue $tableName
-# # # # # # Ensure the required variables are not empty
-# # # # # if [[ -z $oldValue && -z $colIndex && -z $newValue && -z $tableName ]]; then
-# # # # #     echo "The 3 Values Mustn't Be Empty"
-# # # # #     exit 1
-# # # # # fi
-
-# # # # # # Use awk to find and modify the column value
-# # # # # oldValueLocation=$(
-# # # # #     awk -v colIndex="${colIndex}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
-# # # # #     BEGIN { FS = ":"; OFS = ":" }
-# # # # #     {
-# # # # #         if ($colIndex == oldValue) {
-# # # # #             $colIndex = newValue  # Update the value in the column
-# # # # #             print $0  # Print the modified line
-# # # # #         }
-# # # # #     }' /home/zalabany/DBMS-Bash-Project/DataBase/DB1/$tableName
-# # # # # )
-
-# # # # # # Check if the line is found and update the file
-# # # # # echo "${oldValueLocation}"
-# # # # # if [[ ! -z $oldValueLocation ]]; then
-# # # # #     # echo -e "Line Found Updating To ---> \n$oldValueLocation"
-
-# # # # #     # Use sed to update the file
-# # # # #     sed -i "s/${oldValue}/${newValue}/g" /home/zalabany/DBMS-Bash-Project/DataBase/DB1/$tableName
-
-# # # # #     echo "File updated successfully."
-# # # # # else
-# # # # #     echo "Not Found"
-# # # # # fi
-# # # # --------------------------------------------------------------------------------------------------------------------
 # # # # #!/bin/bash
 # # # # shopt -s extglob # Enable extended pattern matching
 
-# # # # function UpdateMenu(){
-# # # #     # List files in the current directory, excluding `.meta_data` files
+# # # # function UpdateMenu() {
+# # # #     # bgyb al List Bta3t al files
 # # # #     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-    
-# # # #     # Dynamically present the file selection menu
-# # # #     echo -e "Listing Files:\n"
-# # # #     select item in "${list[@]}" "Exit"; do
+# # # #     # bwry al user al list bta3t al Tables al mwgood 3shan nshlha law mwgoda bd5lha law la2 3ala alah
+# # # #     echo -e "Listing Tables:\n"
+# # # #     select item in "${list[@]}" "Cancel" "Exit"; do
 # # # #         if [[ "$item" == "Exit" ]]; then
 # # # #             echo "Exiting program."
 # # # #             exit 0
+# # # #         elif [[ "$item" == "Cancel" ]]; then
+# # # #             echo "You selected: $item Backing to TableMenu"
+# # # #             . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+# # # #             break
 # # # #         elif [[ -n "$item" ]]; then
 # # # #             echo "You selected: $item"
-# # # #             choice="${item}"
-# # # #             break  
+# # # #             tableName="${item}"
+# # # #             break
 # # # #         else
 # # # #             echo "Invalid selection, try again."
 # # # #         fi
 # # # #     done
-
-# # # #     # Construct the metadata file path
-# # # #     metadataFile="${PWD}/${choice}.meta_data"
+# # # #     tableValue=($(~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$tableName"))
+# # # #     metadataFile="${PWD}/${tableName}.meta_data"
 # # # #     if [[ ! -f "$metadataFile" ]]; then
-# # # #         echo "Metadata file not found for $choice. Exiting."
+# # # #         echo "Metadata file not found for $tableName. Exiting."
 # # # #         exit 1
 # # # #     fi
 
-# # # #     # Read column names from the metadata file
 # # # #     columnName=($(awk -F: '{print $1}' "$metadataFile"))
-# # # #     echo -e "Columns available: ${columnName[@]}"
+# # # #     columnType=($(awk -F: '{print $2}' "$metadataFile"))
+# # # #     echo -e "\nColumns available: ${columnName[@]}"
 
-# # # #     # Main column selection menu
 # # # #     echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
-# # # #     select colName in "${columnName[@]}" "value" "Exit"; do
+# # # #     select colName in "${columnName[@]}" "value" "TableMenu" "Exit"; do
 # # # #         if [[ "$colName" == "Exit" ]]; then
 # # # #             echo "Exiting updating process."
 # # # #             break
-# # # #         elif [[ -n "$colName" && "$colName" != "value" ]]; then
-# # # #             # Find the index of the selected column
+# # # #             ################################################################################################################################
+# # # #         elif [[ -n "$colName" && "$colName" != "value" && "$colName" != "TableMenu" ]]; then
+# # # #             # Bgyb al index Bta3 a We BRKM AL SELECT
 # # # #             for i in "${!columnName[@]}"; do
 # # # #                 if [[ "${columnName[$i]}" == "$colName" ]]; then
+# # # #                     echo "${columnType[$i]}"
 # # # #                     colIndex=$i
 # # # #                     break
 # # # #                 fi
-# # # #             done 
+# # # #             done
+# # # #             ################################################################################################################################
+
+# # # #             # bshof alw al al column da PK bbasy anh Bk 3shan mnf3sh yb2a Mtkrr
+# # # #     echo ${tableValue}
 # # # #             echo "You selected: $colName (Index: $colIndex)"
-            
-# # # #             # Check if it's the fprimary key column (assume first column is PK)
 # # # #             if [[ "$colName" == "${columnName[0]}" ]]; then
+# # # #                 echo "${columnType[$i]}"
 # # # #                 echo "You are attempting to update the Primary Key (PK) column."
 # # # #                 read -r -p "Enter the PrimaryKey Value: " currentValue
 # # # #                 read -r -p "Enter the new value: " newValue
-
-# # # #                 # if [[  "$newValue" ]]
+# # # #                 #Ba5od al value we bt2kd anha F3la Mwgoda fe al file
+# # # #                 #we bb3t al file bel Pk we al index 3shan ast5dmo Ka filed fe al AWK
 # # # #                 . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" "PK"
+# # # #                 ################################################################################################################################
+
 # # # #             else
 # # # #                 echo "You are updating the $colName column."
 # # # #                 read -r -p "Enter the current value: " currentValue
+# # # #                 echo -e "\nNOTE: New Value Can't have spaces,Use "_" if needed\n"
 # # # #                 read -r -p "Enter the new value: " newValue
-                
-# # # #                 # Check if updateRecord.sh exists and source it
+# # # #                 ################################################################################################################################
+
+# # # #                 #Ba5od al value we bt2kd anha F3la Mwgoda fe al file
+# # # #                 #we bb3t al file bel index 3shan ast5dmo Ka filed fe al AWK we msh bb3t al Pk
 # # # #                 if [[ -f ~/DBMS-Bash-Project/Scripts/updateAll.sh ]]; then
-# # # #                     . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" 
+# # # #                     . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$tableName"
+# # # #                     ################################################################################################################################
+
 # # # #                 else
 # # # #                     echo "updateRecord.sh script not found!"
 # # # #                 fi
 # # # #             fi
 # # # #             break
 # # # #         elif [[ "$colName" == "value" ]]; then
+# # # #             ################################################################################################################################
+# # # #             #ba5od mn al User Spicific Value we a3ml Comparison Bel Awl File_Name()
+# # # #             #btlob mn al user Yd5ly al value 3ala tool 3shan mfysh Select we bkarn alvalue mwgoda wala la2
+# # # #             echo "${tableValue[@]}"
 # # # #             echo -e "\nSelect the column to update its values:"
-# # # #            for i in "${!columnName[@]}"; do
-# # # #                 if [[ "${columnName[$i]}" == "$colName" ]]; then
-# # # #                     colIndex=$i
-# # # #                     break
-# # # #                 fi
-# # # #             done 
-# # # #                     echo "Select Spicfic Record Enter 2 values PK and the value you want to Change"
-# # # #                     read -r -p "Enter the Primary Key value: " PK
-# # # #                     read -r -p "Enter the current value: " currentValue
-# # # #                     read -r -p "Enter the new value : " newValue
-# # # #                     . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" 
-                
-# # # #                     # Add the actual update logic here if needed
-# # # #                     break  
-# # # #                 else
-# # # #                     echo "Invalid selection, try again."
-# # # #                 fi
+# # # #             echo "Select Spicfic Record Enter 2 values PK and the value you want to Change"
+# # # #             read -r -p "Enter the Primary Key value: " PK
+# # # #             read -r -p "Enter the current value: " currentValue
+# # # #             echo -e "\nNOTE: New Value Can't have spaces,Use "_" if needed\n"
+# # # #             read -r -p "Enter the new value : " newValue
+# # # #             echo "$PK  $currentValue $newValue $tableName"
+# # # #             . ~/DBMS-Bash-Project/Scripts/updateRecord.sh "$PK" "$currentValue" "$newValue" "$tableName"
+# # # #             break
+# # # #         elif [[ "$colName" == "TableMenu" ]]; then
+# # # #             if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+# # # #                 . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+# # # #             else
+# # # #                 echo "tableMenu.sh script not found!"
+# # # #             fi
 # # # #             break
 # # # #         else
 # # # #             echo "Invalid selection, try again."
@@ -468,14 +579,17 @@
 # # # # }
 
 # # # # UpdateMenu
+# # # #             ################################################################################################################################
+
 # # # #!/bin/bash
 # # # shopt -s extglob # Enable extended pattern matching
 
-# # # function UpdateMenu() {
-# # #     # bgyb al List Bta3t al files
+# # # function SelectMenu() {
+
+# # #     # List files in the current directory, excluding `.meta_data` files
 # # #     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-# # #     # bwry al user al list bta3t al Tables al mwgood 3shan nshlha law mwgoda bd5lha law la2 3ala alah
-# # #     echo -e "Listing Tables:\n"
+
+# # #     # Dynamically present the file selection menu
 # # #     select item in "${list[@]}" "Cancel" "Exit"; do
 # # #         if [[ "$item" == "Exit" ]]; then
 # # #             echo "Exiting program."
@@ -493,83 +607,63 @@
 # # #         fi
 # # #     done
 # # #     tableValue=($(~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$tableName"))
+
+# # #     # Construct the metadata file path
 # # #     metadataFile="${PWD}/${tableName}.meta_data"
 # # #     if [[ ! -f "$metadataFile" ]]; then
-# # #         echo "Metadata file not found for $tableName. Exiting."
+# # #         echo "Metadata file not found for $choice. Exiting."
 # # #         exit 1
 # # #     fi
 
+# # #     # Read column names from the metadata file
 # # #     columnName=($(awk -F: '{print $1}' "$metadataFile"))
-# # #     columnType=($(awk -F: '{print $2}' "$metadataFile"))
-# # #     echo -e "\nColumns available: ${columnName[@]}"
-
+# # #     echo -e "Columns available: ${columnName[@]}"
+# # #     # Main column selection menu
 # # #     echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
-# # #     select colName in "${columnName[@]}" "value" "TableMenu" "Exit"; do
+# # #     select colName in "${columnName[@]}" "DeleteAll" "Exit"; do
 # # #         if [[ "$colName" == "Exit" ]]; then
-# # #             echo "Exiting updating process."
+# # #             echo "Exiting Selecting process."
 # # #             break
-# # #             ################################################################################################################################
-# # #         elif [[ -n "$colName" && "$colName" != "value" && "$colName" != "TableMenu" ]]; then
-# # #             # Bgyb al index Bta3 a We BRKM AL SELECT
+# # #         elif [[ -n "$colName" && "$colName" != "DeleteAll" ]]; then
+
+# # #             # Find the index of the selected column
 # # #             for i in "${!columnName[@]}"; do
 # # #                 if [[ "${columnName[$i]}" == "$colName" ]]; then
-# # #                     echo "${columnType[$i]}"
-# # #                     colIndex=$i
+# # #                     colIndex=$((i + 1)) # Make it 1-based index for awk
 # # #                     break
 # # #                 fi
 # # #             done
-# # #             ################################################################################################################################
-
-# # #             # bshof alw al al column da PK bbasy anh Bk 3shan mnf3sh yb2a Mtkrr
-# # #     echo ${tableValue}
 # # #             echo "You selected: $colName (Index: $colIndex)"
+
+# # #             # Check if it's the primary key column (assume first column is PK)
+# # #             echo "${tableValue[@]}"
 # # #             if [[ "$colName" == "${columnName[0]}" ]]; then
-# # #                 echo "${columnType[$i]}"
-# # #                 echo "You are attempting to update the Primary Key (PK) column."
-# # #                 read -r -p "Enter the PrimaryKey Value: " currentValue
-# # #                 read -r -p "Enter the new value: " newValue
-# # #                 #Ba5od al value we bt2kd anha F3la Mwgoda fe al file
-# # #                 #we bb3t al file bel Pk we al index 3shan ast5dmo Ka filed fe al AWK
-# # #                 . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" "PK"
-# # #                 ################################################################################################################################
-
-# # #             else
-# # #                 echo "You are updating the $colName column."
-# # #                 read -r -p "Enter the current value: " currentValue
-# # #                 echo -e "\nNOTE: New Value Can't have spaces,Use "_" if needed\n"
-# # #                 read -r -p "Enter the new value: " newValue
-# # #                 ################################################################################################################################
-
-# # #                 #Ba5od al value we bt2kd anha F3la Mwgoda fe al file
-# # #                 #we bb3t al file bel index 3shan ast5dmo Ka filed fe al AWK we msh bb3t al Pk
-# # #                 if [[ -f ~/DBMS-Bash-Project/Scripts/updateAll.sh ]]; then
-# # #                     . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$tableName"
-# # #                     ################################################################################################################################
-
+# # #                 echo "You are attempting to delete the Primary Key (PK) column. If you leave the value empty, it will return the whole column."
+# # #                 read -r -p "Enter the Primary Key value: " currentValue
+# # #                 if [[ -f ~/DBMS-Bash-Project/Scripts/deleteAll.sh ]]; then
+# # #                     . ~/DBMS-Bash-Project/Scripts/deleteAll.sh "$tableName" "$colIndex" "$currentValue"
 # # #                 else
-# # #                     echo "updateRecord.sh script not found!"
+# # #                     echo "deleteAll.sh script not found!"
+# # #                 fi
+# # #             else
+# # #                 echo -e "\nListing Columns\nIf you choose a column, you will delete in that column."
+# # #                 echo "${tableValue[@]}"
+# # #                 echo "You are selecting the $colName column. If you leave the value empty, it will return the whole column."
+# # #                 read -r -p "Enter the current value: " currentValue
+# # #                 if [[ -f ~/DBMS-Bash-Project/Scripts/deleteAll.sh ]]; then
+# # #                     . ~/DBMS-Bash-Project/Scripts/deleteAll.sh "$item" "$colIndex" "$currentValue"
+# # #                 else
+# # #                     echo "deleteAll.sh script not found!"
 # # #                 fi
 # # #             fi
 # # #             break
-# # #         elif [[ "$colName" == "value" ]]; then
-# # #             ################################################################################################################################
-# # #             #ba5od mn al User Spicific Value we a3ml Comparison Bel Awl File_Name()
-# # #             #btlob mn al user Yd5ly al value 3ala tool 3shan mfysh Select we bkarn alvalue mwgoda wala la2
+# # #         elif [[ "$colName" == "DeleteAll" ]]; then
 # # #             echo "${tableValue[@]}"
-# # #             echo -e "\nSelect the column to update its values:"
-# # #             echo "Select Spicfic Record Enter 2 values PK and the value you want to Change"
-# # #             read -r -p "Enter the Primary Key value: " PK
-# # #             read -r -p "Enter the current value: " currentValue
-# # #             echo -e "\nNOTE: New Value Can't have spaces,Use "_" if needed\n"
-# # #             read -r -p "Enter the new value : " newValue
-# # #             echo "$PK  $currentValue $newValue $tableName"
-# # #             . ~/DBMS-Bash-Project/Scripts/updateRecord.sh "$PK" "$currentValue" "$newValue" "$tableName"
-# # #             break
-# # #         elif [[ "$colName" == "TableMenu" ]]; then
+# # #             echo "You are attempting to delete all records in the table."
 # # #             if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
-# # #                 . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+# # #                 . ~/DBMS-Bash-Project/Scripts/deleteAll.sh "$item" "DeleteAll"
 # # #             else
-# # #                 echo "tableMenu.sh script not found!"
+# # #                 echo "selectAll.sh script not found!"
 # # #             fi
 # # #             break
 # # #         else
@@ -577,19 +671,15 @@
 # # #         fi
 # # #     done
 # # # }
+# # # #             ################################################################################################################################
 
-# # # UpdateMenu
-# # #             ################################################################################################################################
-
+# # # SelectMenu
 # # #!/bin/bash
 # # shopt -s extglob # Enable extended pattern matching
-
+# ################################################################################################################################
 # # function SelectMenu() {
-
-# #     # List files in the current directory, excluding `.meta_data` files
 # #     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-
-# #     # Dynamically present the file selection menu
+# #     echo -e "Listing Files:\n"
 # #     select item in "${list[@]}" "Cancel" "Exit"; do
 # #         if [[ "$item" == "Exit" ]]; then
 # #             echo "Exiting program."
@@ -607,26 +697,22 @@
 # #         fi
 # #     done
 # #     tableValue=($(~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$tableName"))
-
-# #     # Construct the metadata file path
+# #     echo "${tableValue}"
 # #     metadataFile="${PWD}/${tableName}.meta_data"
 # #     if [[ ! -f "$metadataFile" ]]; then
-# #         echo "Metadata file not found for $choice. Exiting."
-# #         exit 1
+# #         echo "Metadata file not found for $tableName. Exiting."
+# #         . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
 # #     fi
 
-# #     # Read column names from the metadata file
 # #     columnName=($(awk -F: '{print $1}' "$metadataFile"))
 # #     echo -e "Columns available: ${columnName[@]}"
-# #     # Main column selection menu
-# #     echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
-# #     select colName in "${columnName[@]}" "DeleteAll" "Exit"; do
+
+# #     ##echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
+# #     select colName in "${columnName[@]}" "Select*" "value" "TableMenu" "Exit"; do
 # #         if [[ "$colName" == "Exit" ]]; then
 # #             echo "Exiting Selecting process."
 # #             break
-# #         elif [[ -n "$colName" && "$colName" != "DeleteAll" ]]; then
-
-# #             # Find the index of the selected column
+# #         elif [[ -n "$colName" && "$colName" != "value" && "$colName" != "Select*" && "$colName" != "TableMenu" ]]; then
 # #             for i in "${!columnName[@]}"; do
 # #                 if [[ "${columnName[$i]}" == "$colName" ]]; then
 # #                     colIndex=$((i + 1)) # Make it 1-based index for awk
@@ -635,35 +721,50 @@
 # #             done
 # #             echo "You selected: $colName (Index: $colIndex)"
 
-# #             # Check if it's the primary key column (assume first column is PK)
-# #             echo "${tableValue[@]}"
 # #             if [[ "$colName" == "${columnName[0]}" ]]; then
-# #                 echo "You are attempting to delete the Primary Key (PK) column. If you leave the value empty, it will return the whole column."
+# #                 echo "You are attempting to update the Primary Key (PK) column. If you leave the value empty, it will return the whole column."
+# #                 echo "${tableValue}"
 # #                 read -r -p "Enter the Primary Key value: " currentValue
-# #                 if [[ -f ~/DBMS-Bash-Project/Scripts/deleteAll.sh ]]; then
-# #                     . ~/DBMS-Bash-Project/Scripts/deleteAll.sh "$tableName" "$colIndex" "$currentValue"
+# #                 if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+# #                     . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$tableName" "$colIndex" "$currentValue"
 # #                 else
-# #                     echo "deleteAll.sh script not found!"
+# #                     echo "selectAll.sh script not found!"
 # #                 fi
 # #             else
-# #                 echo -e "\nListing Columns\nIf you choose a column, you will delete in that column."
 # #                 echo "${tableValue[@]}"
 # #                 echo "You are selecting the $colName column. If you leave the value empty, it will return the whole column."
 # #                 read -r -p "Enter the current value: " currentValue
-# #                 if [[ -f ~/DBMS-Bash-Project/Scripts/deleteAll.sh ]]; then
-# #                     . ~/DBMS-Bash-Project/Scripts/deleteAll.sh "$item" "$colIndex" "$currentValue"
+# #                 if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+# #                     . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$tableName" "$colIndex" "$currentValue"
 # #                 else
-# #                     echo "deleteAll.sh script not found!"
+# #                     echo "selectAll.sh script not found!"
 # #                 fi
 # #             fi
 # #             break
-# #         elif [[ "$colName" == "DeleteAll" ]]; then
-# #             echo "${tableValue[@]}"
-# #             echo "You are attempting to delete all records in the table."
+# #         elif [[ "$colName" == "Select*" ]]; then
 # #             if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
-# #                 . ~/DBMS-Bash-Project/Scripts/deleteAll.sh "$item" "DeleteAll"
+# #                 . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$tableName" "selectAll"
+# #             else
+# #                 echo "reUsableSelect.sh script not found!"
+# #             fi
+# #             break
+# #         elif [[ "$colName" == "value" ]]; then
+# #             . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh
+# #             echo -e "\nSelect the column to update its values:"
+# #             echo "Select a specific record by entering 2 values: PK and the value you want to Select ."
+# #             read -r -p "Enter the Primary Key value: " PK
+# #             read -r -p "Enter the current value: " currentValue
+# #             echo "$PK  $currentValue  $tableName"
+# #             if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+# #                 . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$tableName" "$colIndex" "$currentValue"
 # #             else
 # #                 echo "selectAll.sh script not found!"
+# #             fi
+# #         elif [[ "$colName" == "TableMenu" ]]; then
+# #             if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+# #                 . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+# #             else
+# #                 echo "tableMenu.sh script not found!"
 # #             fi
 # #             break
 # #         else
@@ -671,15 +772,17 @@
 # #         fi
 # #     done
 # # }
-# # #             ################################################################################################################################
 
 # # SelectMenu
-# #!/bin/bash
+# ##############################################################################################################
+# #! /bin/bash
 # shopt -s extglob # Enable extended pattern matching
-
-# function SelectMenu() {
+# function UpdateMenu() {
+#     # bgyb al List Bta3t al files
 #     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-#     echo -e "Listing Files:\n"
+
+#     # bwry al user al list bta3t al Tables al mwgood 3shan nshlha law mwgoda bd5lha law la2 3ala alah
+#     echo -e "Listing Tables:\n"
 #     select item in "${list[@]}" "Cancel" "Exit"; do
 #         if [[ "$item" == "Exit" ]]; then
 #             echo "Exiting program."
@@ -696,72 +799,76 @@
 #             echo "Invalid selection, try again."
 #         fi
 #     done
+
+#     # bgyb al table values
 #     tableValue=($(~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$tableName"))
-#     echo "${tableValue}"
+
+#     # bshof lw fe metadata mwgoda lw msh mwgoda btl3 error
 #     metadataFile="${PWD}/${tableName}.meta_data"
 #     if [[ ! -f "$metadataFile" ]]; then
 #         echo "Metadata file not found for $tableName. Exiting."
-#         . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+#         exit 1
 #     fi
 
+#     # bgm3 al columns we al types mn al metadata
 #     columnName=($(awk -F: '{print $1}' "$metadataFile"))
-#     echo -e "Columns available: ${columnName[@]}"
+#     columnType=($(awk -F: '{print $2}' "$metadataFile"))
 
-#     ##echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
-#     select colName in "${columnName[@]}" "Select*" "value" "TableMenu" "Exit"; do
+#     echo -e "\nColumns available: ${columnName[@]}"
+
+#     # B3ml menu 3shan a5tar al column li 3ayz a update
+#     echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
+#     select colName in "${columnName[@]}" "value" "TableMenu" "Exit"; do
 #         if [[ "$colName" == "Exit" ]]; then
-#             echo "Exiting Selecting process."
+#             echo "Exiting updating process."
 #             break
-#         elif [[ -n "$colName" && "$colName" != "value" && "$colName" != "Select*" && "$colName" != "TableMenu" ]]; then
+#         elif [[ -n "$colName" && "$colName" != "value" && "$colName" != "TableMenu" ]]; then
+#             # Bgyb al index Bta3 al column li 3ayz a update
 #             for i in "${!columnName[@]}"; do
 #                 if [[ "${columnName[$i]}" == "$colName" ]]; then
-#                     colIndex=$((i + 1)) # Make it 1-based index for awk
+#                     colIndex=$i
 #                     break
 #                 fi
 #             done
-#             echo "You selected: $colName (Index: $colIndex)"
 
+#             # bshof alw al column da PK bbasy anh Bk 3shan mnf3sh yb2a Mtkrr
+#             echo "${tableValue[@]}"
+#             echo "You selected: $colName (Index: $colIndex)"
 #             if [[ "$colName" == "${columnName[0]}" ]]; then
-#                 echo "You are attempting to update the Primary Key (PK) column. If you leave the value empty, it will return the whole column."
-#                 echo "${tableValue}"
-#                 read -r -p "Enter the Primary Key value: " currentValue
-#                 if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
-#                     . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$tableName" "$colIndex" "$currentValue"
-#                 else
-#                     echo "selectAll.sh script not found!"
-#                 fi
+#                 echo "You are attempting to update the Primary Key (PK) column."
+#                 read -r -p "Enter the Primary Key Value: " currentValue
+#                 read -r -p "Enter the new value: " newValue
+#                 # Ba5od al value we bt2kd anha F3la Mwgoda fe al file
+#                 # we bb3t al file bel Pk we al index 3shan ast5dmo Ka filed fe al AWK
+#                 . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$item" "PK"
 #             else
-#                 echo "${tableValue[@]}"
-#                 echo "You are selecting the $colName column. If you leave the value empty, it will return the whole column."
+#                 echo "You are updating the $colName column."
 #                 read -r -p "Enter the current value: " currentValue
-#                 if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
-#                     . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$tableName" "$colIndex" "$currentValue"
+#                 echo -e "\nNOTE: New Value Can't have spaces, Use '_' if needed\n"
+#                 read -r -p "Enter the new value: " newValue
+#                 # Ba5od al value we bt2kd anha F3la Mwgoda fe al file
+#                 # we bb3t al file bel index 3shan ast5dmo Ka filed fe al AWK we msh bb3t al Pk
+#                 if [[ -f ~/DBMS-Bash-Project/Scripts/updateAll.sh ]]; then
+#                     . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$tableName"
 #                 else
-#                     echo "selectAll.sh script not found!"
+#                     echo "updateAll.sh script not found!"
 #                 fi
-#             fi
-#             break
-#         elif [[ "$colName" == "Select*" ]]; then
-#             if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
-#                 . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$tableName" "selectAll"
-#             else
-#                 echo "reUsableSelect.sh script not found!"
 #             fi
 #             break
 #         elif [[ "$colName" == "value" ]]; then
-#             . ~/DBMS-Bash-Project/Scripts/reUsableSelect.sh
+#             # ba5od mn al User Spicific Value we a3ml Comparison Bel Awl File_Name()
+#             # btlob mn al user Yd5ly al value 3ala tool 3shan mfysh Select we bkarn alvalue mwgoda wala la2
+#             echo "${tableValue[@]}"
 #             echo -e "\nSelect the column to update its values:"
-#             echo "Select a specific record by entering 2 values: PK and the value you want to Select ."
+#             echo "Select Specific Record. Enter 2 values: PK and the value you want to change."
 #             read -r -p "Enter the Primary Key value: " PK
 #             read -r -p "Enter the current value: " currentValue
-#             echo "$PK  $currentValue  $tableName"
-#             if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
-#                 . ~/DBMS-Bash-Project/Scripts/selectAll.sh "$tableName" "$colIndex" "$currentValue"
-#             else
-#                 echo "selectAll.sh script not found!"
-#             fi
+#             echo -e "\nNOTE: New Value Can't have spaces, Use '_' if needed\n"
+#             read -r -p "Enter the new value: " newValue
+#             . ~/DBMS-Bash-Project/Scripts/updateRecord.sh "$PK" "$currentValue" "$newValue" "$tableName"
+#             break
 #         elif [[ "$colName" == "TableMenu" ]]; then
-#             if [[ -f ~/DBMS-Bash-Project/Scripts/selectAll.sh ]]; then
+#             if [[ -f ~/DBMS-Bash-Project/Scripts/tableMenu.sh ]]; then
 #                 . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
 #             else
 #                 echo "tableMenu.sh script not found!"
@@ -773,4 +880,4 @@
 #     done
 # }
 
-# SelectMenu
+# UpdateMenu
