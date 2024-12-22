@@ -1,8 +1,8 @@
 #!/bin/bash
-shopt -s extglob # Enable extended pattern matching
+shopt -s extglob
 clear
 function reUsableSelect() {
-    tableName="$1" # Example: Table name (file)
+    tableName="$1"
     colIndex="selectAll"
     if [[ -z "$tableName" || -z "$colIndex" ]]; then
         echo "Error: Table name and column index must not be empty."
@@ -28,9 +28,7 @@ function reUsableSelect() {
         . ~/DBMS-Bash-Project/Scripts/selectMenu.sh
     fi
 
-    # Output the result
     echo "$currentValueLocation"
 }
 
-# Call the function with arguments (if any)
 reUsableSelect "$1" "$2" "$3" "$4"

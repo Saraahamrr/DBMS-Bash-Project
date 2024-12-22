@@ -16,13 +16,11 @@ function tableMenu() {
             "ListTables" | "2")
                 echo "Listing tables..."
                 . ~/DBMS-Bash-Project/Scripts/listingTable.sh
-                # Add logic to list tables here
                 break
                 ;;
             "SelectTable" | "3")
                 echo "Selecting data..."
                 . ~/DBMS-Bash-Project/Scripts/selectMenu.sh
-                # Add logic to select a table here
                 break
                 ;;
             "Insert" | "4")
@@ -33,19 +31,16 @@ function tableMenu() {
             "Update" | "5")
                 echo "Updating table..."
                 . ~/DBMS-Bash-Project/Scripts/updateMenu.sh
-                # Add logic to update table here
                 break
                 ;;
             "Delete" | "6")
                 echo "Deleting table..."
                 . ~/DBMS-Bash-Project/Scripts/deleteMenu.sh
-                # Add logic to delete table here
                 break
                 ;;
             "DataBaseMenu" | "7")
                 echo "Returning to Database Menu..."
                 ~/DBMS-Bash-Project/DBScript
-                # Add logic to go back to the database menu
                 break
                 ;;
             "Exit" | "8")

@@ -26,17 +26,14 @@ function DeleteMenu() {
 
     tableValue=($(~/DBMS-Bash-Project/Scripts/reUsableSelect.sh "$tableName"))
 
-    # Construct the metadata file path
     metadataFile="${PWD}/${tableName}.meta_data"
     if [[ ! -f "$metadataFile" ]]; then
         echo "Metadata file not found for $tableName. Exiting."
         exit 1
     fi
 
-    # Read column names from the metadata file
     columnName=($(awk -F: '{print $1}' "$metadataFile"))
     echo -e "Columns available: ${columnName[@]}"
-    # Main column selection menu
     echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
     select colName in "${columnName[@]}" "DeleteAll" "Exit"; do
         if [[ "$colName" == "Exit" ]]; then
@@ -44,16 +41,14 @@ function DeleteMenu() {
             break
         elif [[ -n "$colName" && "$colName" != "DeleteAll" ]]; then
 
-            # Find the index of the selected column
             for i in "${!columnName[@]}"; do
                 if [[ "${columnName[$i]}" == "$colName" ]]; then
-                    colIndex=$((i + 1)) # Make it 1-based index for awk
+                    colIndex=$((i + 1))
                     break
                 fi
             done
             echo "You selected: $colName (Index: $colIndex)"
 
-            # Check if it's the primary key column (assume first column is PK)
             echo "${tableValue[@]}"
             if [[ "$colName" == "${columnName[0]}" ]]; then
                 echo "You are attempting to delete the Primary Key (PK) column. If you leave the value empty, it will return the whole column."

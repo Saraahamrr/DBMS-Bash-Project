@@ -18,12 +18,12 @@ function Welcome() {
 }
 Welcome
 function mainMenu() {
+    cd ~/DBMS-Bash-Project/DataBase
     loop=true
     # PS1="SelectOption$"
     while $loop; do
         echo "Main Menu:"
         PS3="SelectOption: "
-        # cd ~/DBMS-Bash-Project/DataBase
         select option in CreateDB ListDB ConnectDB DropDB Exit; do
             PS3="SelectOption: "
             case $option in
@@ -34,7 +34,6 @@ function mainMenu() {
                 ;;
             [Ll][Ii][Ss][Tt][Dd][Bb] | "2")
                 . ~/DBMS-Bash-Project/Scripts/listDB.sh
-                # echo "Existing DataBase:\n$(ls ~/DBMS-Bash-Project/DataBase/)"
                 break
                 ;;
             [Cc][Oo][Nn][Nn][Ee][Cc][Tt][Dd][Bb] | "3")

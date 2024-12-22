@@ -1,8 +1,6 @@
 #!/usr/bin/bash
 insertIntoTable() {
-    # Prompt user to enter the table name
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-    # Dynamically present the file selection menu
     select item in "${list[@]}" "Cancel" "Exit"; do
         if [[ "$item" == "Exit" ]]; then
             echo "Exiting program."
@@ -19,8 +17,6 @@ insertIntoTable() {
             echo "Invalid selection, try again."
         fi
     done
-
-    # Check if the table exists
     while true; do
         if [[ -e "${PWD}/$tableName" && -f "${PWD}/$tableName" ]]; then
             echo "Proceeding with insertion into table '$tableName'."
@@ -31,7 +27,6 @@ insertIntoTable() {
         fi
     done
     echo -e "Using table: $tableName\n"
-    # Read metadata file
     metadataFile="${PWD}/${tableName}.meta_data"
     if [[ ! -e "$metadataFile" ]]; then
         echo "Error: Metadata file not found for table '$tableName'."
@@ -44,16 +39,13 @@ insertIntoTable() {
     lines=($(awk '{print $0}' $metadataFile))
     numColumns="${#lines[@]}"
     tableContent=""
-    # Process each column based on metadata
     echo "The First Value is Your PrimaryKey"
     for i in "${!lines[@]}"; do
         IFS=':' read -r colName colDataType colPK <<<"${lines[i]}"
         while true; do
-            # Prompt user for column value
             read -r -p "Enter value for $colName ($colDataType): " ColValue
             valid=1
 
-            # Validate data type
             if [[ $colDataType == "int" && ! $ColValue =~ ^[0-9]+$ ]]; then
                 echo "ERROR: Value must be an integer."
                 valid=0
@@ -61,7 +53,6 @@ insertIntoTable() {
                 echo "ERROR: Value must be a string."
                 valid=0
             fi
-            # Validate primary key
             if [[ $colPK == "PK" ]]; then
                 while IFS= read -r record; do
                     IFS=':' read -r -a fields <<<"$record"

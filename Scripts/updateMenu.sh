@@ -5,7 +5,6 @@ clear
 function UpdateMenu() {
     # bgyb al List Bta3t al files
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-
     # bwry al user al list bta3t al Tables al mwgood 3shan nshlha law mwgoda bd5lha law la2 3ala alah
     echo -e "Listing Tables:\n"
     select item in "${list[@]}" "Cancel" "Exit"; do
@@ -62,8 +61,6 @@ function UpdateMenu() {
                 echo "You are attempting to update the Primary Key (PK) column."
                 read -r -p "Enter the Primary Key Value: " currentValue
                 read -r -p "Enter the new value: " newValue
-                # For Primary Key validation
-
                 if [[ (-z "$newValue" || "$newValue" == "0") && (-z "$currentValue" || "$currentValue" == "0") ]]; then
                     echo "ERROR: values cannot be empty,0,Special Charecters."
                 elif [[ ! "$newValue" =~ ^[0-9]+$ ]]; then
@@ -78,7 +75,6 @@ function UpdateMenu() {
                     fi
                 fi
             else
-                # For other columns
                 echo "You are updating the $colName column."
                 read -r -p "Enter the current value: " currentValue
                 echo -e "\nNOTE: New Value Can't have spaces, Use '_' if needed\n"

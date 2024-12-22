@@ -2,17 +2,15 @@
 shopt -s extglob # Enable extended pattern matching
 clear
 function updateRecord() {
-    # Initialize variables
-    PK=$1 # Value to find
+    PK=$1
     oldValue=$2
-    newValue=$3  # Value to replace with
-    tableName=$4 # Table name (file)
+    newValue=$3
+    tableName=$4
     if [[ -z "$oldValue" || -z "$newValue" || -z "$tableName" || -z "$PK" ]]; then
         echo "The Value must not be empty."
         . ~/DBMS-Bash-Project/Scripts/updateMenu.sh
     fi
 
-    # Use awk to find and modify the column value
     newValueLocation=$(
         awk -v PK="${PK}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
     BEGIN { FS = ":"; OFS = ":" }
@@ -74,7 +72,6 @@ function updateRecord() {
         if [[ -n "$oldValueLocation" ]]; then
             newValue=${newValueLocation}
             oldValue=$oldValueLocation
-            # Update the file with sed, ensuring proper escaping for special characters
             sed -i "s/${oldValueLocation}/${newValueLocation}/g" "${PWD}/${tableName}"
             echo "File updated successfully."
         else

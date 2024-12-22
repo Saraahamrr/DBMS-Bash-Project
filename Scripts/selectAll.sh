@@ -2,11 +2,11 @@
 shopt -s extglob # Enable extended pattern matching
 clear
 function selectAll() {
-    tableName="$1" # Example: Table name (file)
-    colIndex="$2"  # Example: Column index
-    oldValue="$3"  # Example: Value to find
+    tableName="$1"
+    colIndex="$2"
+    oldValue="$3"
     echo "$tableName" $colIndex
-    # Ensure tableName and colIndex are not empty
+
     if [[ -z "$tableName" || -z "$colIndex" ]]; then
         echo "Error: Table name and column index must not be empty."
         . ~/DBMS-Bash-Project/Scripts/selectMenu.sh
@@ -52,9 +52,7 @@ function selectAll() {
         return 1
     fi
 
-    # Output the result
     OFS="\t" echo -e "$oldValueLocation"
 }
 
-# Call the function with arguments (if any)
 selectAll "$1" "$2" "$3" "$4"

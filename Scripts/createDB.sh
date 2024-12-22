@@ -1,7 +1,6 @@
 #! /usr/bin/env bash
 shopt -s extglob
-#REGEX Needed
-
+clear
 . ~/DBMS-Bash-Project/Scripts/RegexFunc.sh
 
 function createDB() {

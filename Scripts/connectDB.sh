@@ -2,9 +2,7 @@
 shopt -s extglob
 function selectDB() {
     clear
-    # Prompt user to enter the table name
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-    # Dynamically present the file selection menu
     select item in "${list[@]}" "Cancel" "Exit"; do
         if [[ "$item" == "Exit" ]]; then
             echo "Exiting program."

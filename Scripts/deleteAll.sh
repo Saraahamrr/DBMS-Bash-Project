@@ -1,7 +1,8 @@
 #!/usr/bin/bash
-shopt -s extglob # Enable extended pattern matching
+shopt -s extglob
 
 function deleteALL() {
+    clear
     tableName="$1"
     colIndex="$2"
     currentValue="$3"
@@ -13,14 +14,11 @@ function deleteALL() {
         return 1
     fi
 
-    # Check if the table file exists
     if [[ ! -f "${PWD}/${tableName}" ]]; then
         echo "Error: Table '${tableName}' not found."
         . ~/DBMS-Bash-Project/Scripts/deleteMenu.sh
         return 1
     fi
-
-    # Delete all or delete specific rows based on column index and value
     if [[ -n "$currentValue" && -n "$colIndex" && "$colIndex" != "DeleteAll" ]]; then
         currentValueLocation=($(
             awk -v colIndex="${colIndex}" -v currentValue="${currentValue}" '
@@ -53,5 +51,4 @@ function deleteALL() {
     fi
 }
 
-# Call the function with arguments (if any)
 deleteALL "$1" "$2" "$3"

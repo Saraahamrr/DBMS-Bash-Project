@@ -32,7 +32,6 @@ function SelectMenu() {
     columnName=($(awk -F: '{print $1}' "$metadataFile"))
     echo -e "Columns available: ${columnName[@]}"
 
-    ##echo -e "\nListing Columns\nIf you choose a column, you will update that column.\n*Note: It is not wise to change the PK of a table*"
     select colName in "${columnName[@]}" "Select*" "value" "TableMenu" "Exit"; do
         if [[ "$colName" == "Exit" ]]; then
             echo "Exiting Selecting process."
@@ -40,7 +39,7 @@ function SelectMenu() {
         elif [[ -n "$colName" && "$colName" != "value" && "$colName" != "Select*" && "$colName" != "TableMenu" ]]; then
             for i in "${!columnName[@]}"; do
                 if [[ "${columnName[$i]}" == "$colName" ]]; then
-                    colIndex=$((i + 1)) # Make it 1-based index for awk
+                    colIndex=$((i + 1))
                     break
                 fi
             done
