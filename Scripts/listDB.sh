@@ -1,13 +1,14 @@
-#! /usr/bin/env bash
-#shopt -s extglob
-function listDataBase() {
-    if [ "$(ls ~/DBMS-Bash-Project/DataBase)" ]; then
-        echo -e "Existing :$(ls ~/DBMS-Bash-Project/DataBase | wc -l) \n$(ls ~/DBMS-Bash-Project/DataBase) \n "
-    else
-        echo -e "No Files Existing :\n$(ls ~/DBMS-Bash-Project/DataBase)" 2>>/dev/null
-    fi
+#!/usr/bin/bash
+shopt -s extglob
 
-    ### why use 2 .... maybe we can     echo -e "No Files Existing :\n$(ls ${~/DBMS-Bash-Project/DataBase})" 2>>/dev/null
-    ### fixed -e to make it read \n
-}
-listDataBase
+
+databases_number=$(ls -l | grep "^d" | awk '{print $NF}' | wc -l)
+
+if [ "$databases_number" -gt 0 ]; then # quoted to insure there's no errors in handling int
+    echo "Databases count : $databases_number"
+else
+    echo "No databases yet"
+fi
+
+
+ls -l | grep "^d" | awk '{print $NF}' # last feild

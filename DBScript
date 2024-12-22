@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 shopt -s extglob
-#REgex
+
 function Welcome() {
     locate=~/DBMS-Bash-Project
     echo "Welcome To our DataBase Project"

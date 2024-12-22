@@ -11,7 +11,7 @@ function createDB() {
         if [[ -e $dbname ]] && [[ -d ~/DBMS-Bash-Project/DataBase/$dbname ]]; then
             echo "Already Exitst"
         else
-            mkdir -p ~/DBMS-Bash-Project/DataBase/"${dbname}" && echo "Database '$dbName' created successfully." || echo "Failed to create database."
+            mkdir -p ~/DBMS-Bash-Project/DataBase/"${dbname}" && echo "Database '$dbname' created successfully." || echo "Failed to create database."
         fi
     else
         echo "Invalid DataBase Name"
