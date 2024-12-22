@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 shopt -s extglob # Enable extended pattern matching
-
+clear
 function selectAll() {
     tableName="$1" # Example: Table name (file)
     colIndex="$2"  # Example: Column index

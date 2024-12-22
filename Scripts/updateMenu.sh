@@ -1,5 +1,7 @@
 #! /bin/bash
 shopt -s extglob # Enable extended pattern matching
+clear
+
 function UpdateMenu() {
     # bgyb al List Bta3t al files
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
@@ -60,10 +62,14 @@ function UpdateMenu() {
                 echo "You are attempting to update the Primary Key (PK) column."
                 read -r -p "Enter the Primary Key Value: " currentValue
                 read -r -p "Enter the new value: " newValue
-                if [[ -z "$newValue" ]]; then
-                    echo "ERROR: New value cannot be empty."
+                # For Primary Key validation
+
+                if [[ (-z "$newValue" || "$newValue" == "0") && (-z "$currentValue" || "$currentValue" == "0") ]]; then
+                    echo "ERROR: values cannot be empty,0,Special Charecters."
                 elif [[ ! "$newValue" =~ ^[0-9]+$ ]]; then
                     echo "ERROR: Value must be an integer."
+                elif [[ "${columnType[$colIndex]}" != "int" && ! "$newValue" =~ ^[a-zA-Z_]+$ ]]; then
+                    echo "ERROR: Value must be a string (letters and underscores only)."
                 else
                     if . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$tableName" "PK"; then
                         echo "Update successful."
@@ -72,6 +78,7 @@ function UpdateMenu() {
                     fi
                 fi
             else
+                # For other columns
                 echo "You are updating the $colName column."
                 read -r -p "Enter the current value: " currentValue
                 echo -e "\nNOTE: New Value Can't have spaces, Use '_' if needed\n"
@@ -80,11 +87,11 @@ function UpdateMenu() {
                     echo "ERROR: New value cannot be empty."
                 elif [[ "${columnType[$colIndex]}" == "int" && ! "$newValue" =~ ^[0-9]+$ ]]; then
                     echo "ERROR: Value must be an integer."
-                elif [[ "${columnType[$colIndex]}" != "int" && "$newValue" =~ ^[0-9]+$ ]]; then
-                    echo "ERROR: Value must be a string."
+                elif [[ "${columnType[$colIndex]}" != "int" && ! "$newValue" =~ ^[a-zA-Z_]+$ ]]; then
+                    echo "ERROR: Value must be a string (letters and underscores only)."
                 else
                     if . ~/DBMS-Bash-Project/Scripts/updateAll.sh "$colIndex" "$currentValue" "$newValue" "$tableName"; then
-                        echo "Update successful."
+                        echo ":)"
                     else
                         echo "ERROR: Update failed."
                     fi
@@ -101,16 +108,13 @@ function UpdateMenu() {
             read -r -p "Enter the new value: " newValue
             if [[ -z "$newValue" ]]; then
                 echo "ERROR: New value cannot be empty."
-            elif [[ "${columnType[$colIndex]}" == "int" && ! "$newValue" =~ ^[0-9]+$ ]]; then
-                echo "ERROR: Value must be an integer."
-            elif [[ "${columnType[$colIndex]}" != "int" && "$newValue" =~ ^[0-9]+$ ]]; then
-                echo "ERROR: Value must be a string."
+            elif [[ -n $PK && -n $currentValue && -n $newValue ]]; then
+                echo "Valid Values "Updating
+                . ~/DBMS-Bash-Project/Scripts/updateRecord.sh "$PK" "$currentValue" "$newValue" "$tableName"
+            elif [[ -z $PK || -z $currentValue || -z $newValue ]]; then
+                echo "InValid Values or Empty"
             else
-                if . ~/DBMS-Bash-Project/Scripts/updateRecord.sh "$PK" "$currentValue" "$newValue" "$tableName"; then
-                    echo "Update successful."
-                else
-                    echo "ERROR: Update failed."
-                fi
+                . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
             fi
             break
         elif [[ "$colName" == "TableMenu" ]]; then

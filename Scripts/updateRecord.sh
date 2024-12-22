@@ -1,19 +1,20 @@
 #! /usr/bin/bash
 shopt -s extglob # Enable extended pattern matching
+clear
+function updateRecord() {
+    # Initialize variables
+    PK=$1 # Value to find
+    oldValue=$2
+    newValue=$3  # Value to replace with
+    tableName=$4 # Table name (file)
+    if [[ -z "$oldValue" || -z "$newValue" || -z "$tableName" || -z "$PK" ]]; then
+        echo "The Value must not be empty."
+        . ~/DBMS-Bash-Project/Scripts/updateMenu.sh
+    fi
 
-# Initialize variables
-PK=$1 # Value to find
-oldValue=$2
-newValue=$3  # Value to replace with
-tableName=$4 # Table name (file)
-if [[ -z "$oldValue" || -z "$newValue" || -z "$tableName" || -z "$PK" ]]; then
-    echo "The Value must not be empty."
-    . ~/DBMS-Bash-Project/Scripts/updateMenu.sh
-fi
-
-# Use awk to find and modify the column value
-newValueLocation=$(
-    awk -v PK="${PK}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
+    # Use awk to find and modify the column value
+    newValueLocation=$(
+        awk -v PK="${PK}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
     BEGIN { FS = ":"; OFS = ":" }
     {
         if ($1 == PK) {  # Check if the primary key matches
@@ -27,9 +28,9 @@ newValueLocation=$(
     }
     
     }' "${PWD}/${tableName}"
-)
-oldValueLocation=$(
-    awk -v PK="${PK}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
+    )
+    oldValueLocation=$(
+        awk -v PK="${PK}" -v oldValue="${oldValue}" -v newValue="${newValue}" '
     BEGIN { FS = ":"; OFS = ":" }
     {
         if ($1 == PK) {  # Check if the primary key matches
@@ -41,69 +42,44 @@ oldValueLocation=$(
     }
     
     }' "${PWD}/${tableName}"
-)
-#validation
-IFS=":" read -r -a validateData <<<"${newValueLocation}"
-meta_data=($(awk -F: '{print $2}' "${PWD}/${tableName}.meta_data"))
-IFS=" " read -r -a metaType <<<"${meta_data[@]}"
-echo "validateData: ${validateData[@]}"
-echo "metaType: ${metaType[@]}"
+    )
+    # Read data into arrays
+    IFS=":" read -r -a validateData <<<"${newValueLocation}"
+    meta_data=($(awk -F: '{print $2}' "${PWD}/${tableName}.meta_data"))
+    IFS=" " read -r -a metaType <<<"${meta_data[@]}"
 
+    echo "validateData: ${validateData[@]}"
+    echo "metaType: ${metaType[@]}"
 
-valid=1
-for j in "${!validateData[@]}"; do
-    #if [[ "${metaType[$j]}" == "int" ]]; then
-        #echo "${validateData[$j]} ===> ${metaType[$j]}"
-        # Do the VAlidation Here
-        if [[ "${metaType[$j]}" == "int" && ! "${validateData[$j]}" =~ ^[0-9]+$ ]]; then
+    valid=1
+    for j in "${!validateData[@]}"; do
+        if [[ "${metaType[$j]}" == "int" ]]; then
+            if [[ ! "${validateData[$j]}" =~ ^[0-9]+$ ]]; then
+                echo "${validateData[$j]} ===> ${metaType[$j]}"
                 echo "ERROR: Value must be an integer."
                 valid=0
-                echo "${validateData[$j]} ===> ${metaType[$j]}"
                 break
-                
-        elif [[ "${metaType[$j]}" != "int" && "${validateData[$j]}" =~ ^[0-9]+$ ]]; then
-                echo "ERROR: Value must be a string."
+            fi
+        else
+            if [[ ! "${validateData[$j]}" =~ ^[a-zA-Z_]+$ ]]; then
+                echo "ERROR: Value must be a string (letters and underscores only)."
+                echo "${validateData[$j]} ===> ${metaType[$j]}"
                 valid=0
-                echo "${validateData[$j]} ===> ${metaType[$j]}"
                 break
+            fi
         fi
-    #else
-        #echo "${validateData[$j]} ===> ${metaType[$j]}"
-        #echo "error invalid data type"
-    #fi
+    done
 
-done
-if [[ $valid -eq 1 ]]; then
-    # echo -e "$oldValueLocation \n"
-    # echo -e "$newValueLocation"
-    # Check if the line was found and update the file
-    if [[ -n "$oldValueLocation" ]]; then
-        newValue=${newValueLocation}
-        oldValue=$oldValueLocation
-        # Update the file with sed, ensuring proper escaping for special characters
-        sed -i "s/${oldValueLocation}/${newValueLocation}/g" "${PWD}/${tableName}"
-
-        echo "File updated successfully."
-    else
-        echo -e "Not Found \nMight Be invalid Data"
-
+    if [[ $valid -eq 1 ]]; then
+        if [[ -n "$oldValueLocation" ]]; then
+            newValue=${newValueLocation}
+            oldValue=$oldValueLocation
+            # Update the file with sed, ensuring proper escaping for special characters
+            sed -i "s/${oldValueLocation}/${newValueLocation}/g" "${PWD}/${tableName}"
+            echo "File updated successfully."
+        else
+            echo -e "Not Found \nMight Be invalid Data"
+        fi
     fi
-    
-fi
-
-# echo -e "$oldValueLocation \n"
-# echo -e "$newValueLocation"
-# Check if the line was found and update the file
-# if [[ -n "$oldValueLocation" ]]; then
-#     newValue=${newValueLocation}
-#     oldValue=$oldValueLocation
-#     # Update the file with sed, ensuring proper escaping for special characters
-#     sed -i "s/${oldValueLocation}/${newValueLocation}/g" "${PWD}/${tableName}"
-
-#     echo "File updated successfully."
-# else
-#     echo -e "Not Found \nMight Be invalid Data"
-
-# fi
-
-
+}
+updateRecord $1 $2 $3 $4

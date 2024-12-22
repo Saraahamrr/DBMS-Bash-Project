@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 shopt -s extglob # Enable extended pattern matching
-
+clear
 # Function to create a table
 function createTable() {
     while true; do

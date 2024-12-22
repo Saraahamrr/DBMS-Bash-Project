@@ -2,34 +2,39 @@
 insertIntoTable() {
     # Prompt user to enter the table name
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-    echo -e "Listing Files:\n"
-    select item in "${list[@]}" "Exit"; do
+    # Dynamically present the file selection menu
+    select item in "${list[@]}" "Cancel" "Exit"; do
         if [[ "$item" == "Exit" ]]; then
             echo "Exiting program."
             exit 0
+        elif [[ "$item" == "Cancel" ]]; then
+            echo "You selected: $item Backing to TableMenu"
+            . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
+            break
         elif [[ -n "$item" ]]; then
             echo "You selected: $item"
-            Tname="${item}"
+            tableName="${item}"
             break
         else
             echo "Invalid selection, try again."
         fi
     done
+
     # Check if the table exists
     while true; do
-        if [[ -e "${PWD}/$Tname" && -f "${PWD}/$Tname" ]]; then
-            echo "Proceeding with insertion into table '$Tname'."
+        if [[ -e "${PWD}/$tableName" && -f "${PWD}/$tableName" ]]; then
+            echo "Proceeding with insertion into table '$tableName'."
             break
         else
-            echo "Table '$Tname' doesn't exist. Please choose another name."
-            read -r -p "Enter Table Name again: " Tname
+            echo "Table '$tableName' doesn't exist. Please choose another name."
+            read -r -p "Enter Table Name again: " tableName
         fi
     done
-    echo -e "Using table: $Tname\n"
+    echo -e "Using table: $tableName\n"
     # Read metadata file
-    metadataFile="${PWD}/${Tname}.meta_data"
+    metadataFile="${PWD}/${tableName}.meta_data"
     if [[ ! -e "$metadataFile" ]]; then
-        echo "Error: Metadata file not found for table '$Tname'."
+        echo "Error: Metadata file not found for table '$tableName'."
         . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
         return 1
     fi
@@ -52,7 +57,7 @@ insertIntoTable() {
             if [[ $colDataType == "int" && ! $ColValue =~ ^[0-9]+$ ]]; then
                 echo "ERROR: Value must be an integer."
                 valid=0
-            elif [[ $colDataType != "int" && $ColValue =~ ^[0-9]+$ ]]; then
+            elif [[ $colDataType != "int" && ! $ColValue =~ ^[a-zA-Z_]+$ ]]; then
                 echo "ERROR: Value must be a string."
                 valid=0
             fi
@@ -65,7 +70,7 @@ insertIntoTable() {
                         valid=0
                         break
                     fi
-                done <"${PWD}/${Tname}"
+                done <"${PWD}/${tableName}"
             fi
             [[ $valid -eq 1 ]] && break
         done
@@ -75,8 +80,8 @@ insertIntoTable() {
             tableContent+="$ColValue:"
         fi
     done
-    echo "$tableContent" >>"${PWD}/${Tname}"
-    echo "Data successfully inserted into table '$Tname'."
+    echo "$tableContent" >>"${PWD}/${tableName}"
+    echo "Data successfully inserted into table '$tableName'."
 }
 
 insertIntoTable

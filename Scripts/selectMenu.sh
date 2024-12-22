@@ -2,6 +2,7 @@
 shopt -s extglob # Enable extended pattern matching
 
 function SelectMenu() {
+    clear
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
     echo -e "Listing Files:\n"
     select item in "${list[@]}" "Cancel" "Exit"; do
@@ -91,6 +92,7 @@ function SelectMenu() {
                 echo "tableMenu.sh script not found!"
             fi
             break
+
         else
             echo "Invalid selection, try again."
         fi

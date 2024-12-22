@@ -1,15 +1,18 @@
 #! /usr/bin/env bash
 shopt -s extglob
-
 function selectDB() {
+    clear
     # Prompt user to enter the table name
-    echo "Enter the Number of the DataBase to Connect:"
     list=($(ls "${PWD}" | grep -v '\.meta_data$'))
-    echo -e "Listing DataBases:\n"
-    select item in "${list[@]}" "Exit"; do
+    # Dynamically present the file selection menu
+    select item in "${list[@]}" "Cancel" "Exit"; do
         if [[ "$item" == "Exit" ]]; then
             echo "Exiting program."
             exit 0
+        elif [[ "$item" == "Cancel" ]]; then
+            echo "You selected: $item Backing to TableMenu"
+            . ~/DBMS-Bash-Project/DBScript
+            break
         elif [[ -n "$item" ]]; then
             echo "You selected: $item"
             dbName="${item}"
@@ -20,8 +23,8 @@ function selectDB() {
     done
     if [[ -e ~/DBMS-Bash-Project/DataBase/$dbName ]] && [[ -d ~/DBMS-Bash-Project/DataBase/$dbName ]]; then
         echo "Connected To ${dbName}"
-        cd ~/DBMS-Bash-Project/DataBase/$dbName  2>/dev/null
-        . ~/DBMS-Bash-Project/Scripts/tableMenu.sh  
+        cd ~/DBMS-Bash-Project/DataBase/$dbName 2>/dev/null
+        . ~/DBMS-Bash-Project/Scripts/tableMenu.sh
     else
         echo -e "Database '$dbName' does not exist \nDo you want to Create DB?"
         read answer

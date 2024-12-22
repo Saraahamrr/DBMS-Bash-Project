@@ -1,6 +1,6 @@
 #!/bin/bash
 shopt -s extglob # Enable extended pattern matching
-
+clear
 function reUsableSelect() {
     tableName="$1" # Example: Table name (file)
     colIndex="selectAll"

@@ -1,8 +1,7 @@
 #! /usr/bin/env bash
 shopt -s extglob
-
 function Welcome() {
-    locate=~/DBMS-Bash-Project
+    clear
     echo "Welcome To our DataBase Project"
     if [ -e ~/DBMS-Bash-Project/DataBase ] && [ -d ~/DBMS-Bash-Project/DataBase ]; then
         echo "DBMS is Ready"

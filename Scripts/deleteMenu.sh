@@ -1,6 +1,6 @@
 #! /bin/bash
 shopt -s extglob # Enable extended pattern matching
-
+clear
 function DeleteMenu() {
 
     # List files in the current directory, excluding `.meta_data` files

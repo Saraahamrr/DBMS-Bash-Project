@@ -2,12 +2,7 @@
 shopt -s extglob
 
 function tableMenu() {
-    SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-    #echo "${SCRIPT_DIR}"
     PS3="SelectOption $:"
-    loop=true
-    #!/usr/bin/env bash
-
     # Main Menu Loop
     while true; do
         echo "Table Main Menu: "
@@ -20,7 +15,7 @@ function tableMenu() {
                 ;;
             "ListTables" | "2")
                 echo "Listing tables..."
-                . ~/DBMS-Bash-Project/Scripts/ListTB.sh
+                . ~/DBMS-Bash-Project/Scripts/listingTable.sh
                 # Add logic to list tables here
                 break
                 ;;
