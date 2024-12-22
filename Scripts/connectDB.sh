@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-# shopt -s extglob
+shopt -s extglob
 
 function selectDB() {
     # Prompt user to enter the table name
@@ -20,8 +20,8 @@ function selectDB() {
     done
     if [[ -e ~/DBMS-Bash-Project/DataBase/$dbName ]] && [[ -d ~/DBMS-Bash-Project/DataBase/$dbName ]]; then
         echo "Connected To ${dbName}"
-        cd ~/DBMS-Bash-Project/DataBase/$dbname 
-        . ~/DBMS-Bash-Project/Scripts/tableMenu.sh  >/dev/null #had some output we want to surpress
+        cd ~/DBMS-Bash-Project/DataBase/$dbName  2>/dev/null
+        . ~/DBMS-Bash-Project/Scripts/tableMenu.sh  
     else
         echo -e "Database '$dbName' does not exist \nDo you want to Create DB?"
         read answer

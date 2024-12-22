@@ -3,7 +3,7 @@ shopt -s extglob
 
 function tableMenu() {
     SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-    echo "${SCRIPT_DIR}"
+    #echo "${SCRIPT_DIR}"
     PS3="SelectOption $:"
     loop=true
     #!/usr/bin/env bash

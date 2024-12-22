@@ -1,4 +1,4 @@
 id:int:PK
 name:str
-phone:str
+phone:int
 

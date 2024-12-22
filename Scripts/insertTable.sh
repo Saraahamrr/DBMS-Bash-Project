@@ -56,6 +56,9 @@ insertIntoTable() {
             if [[ $colDataType == "int" && ! $ColValue =~ ^[0-9]+$ ]]; then
                 echo "ERROR: Value must be an integer."
                 valid=0
+            elif [[ $colDataType != "int" && $ColValue =~ ^[0-9]+$ ]]; then
+                echo "ERROR: Value must be a string."
+                valid=0
             fi
 
             # Validate primary key
