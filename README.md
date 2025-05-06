@@ -24,3 +24,12 @@ A simple **Database Management System** built using **Bash scripting**, providin
 git clone https://github.com/Saraahamrr/DBMS-Bash-Project.git
 cd DBMS-Bash-Project
 ```
+Give execute permission to the main script:
+
+```
+chmod +x main.sh
+```
+Run the application:
+```
+./main.sh
+```
